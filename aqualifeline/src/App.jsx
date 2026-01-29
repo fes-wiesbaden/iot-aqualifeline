@@ -1,16 +1,31 @@
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
+import SystemView from "./SystemView";
+
+function LoggedIn() {
+  return <SystemView />;
+}
 
 function App() {
+  const navigate = useNavigate();
+
   return (
-    <>
-      <header>
-        <h1 id="logoheadline">AquaLifeline</h1>
-        <input type="textbox" placeholder="ENTER YOUR KEY"></input>
-        <button className="submit">VIEW SYSTEM</button>
-      </header>
-    </>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <header>
+            <h1>AquaLifeline</h1>
+            <input placeholder="E-MAIL" />
+            <input placeholder="PASSWORD" />
+            <button className='submit' onClick={() => navigate("/loggedIn")}>
+              LOGIN
+            </button>
+          </header>
+        }
+      />
+      <Route path="/loggedIn" element={<LoggedIn />} />
+    </Routes>
   );
 }
 

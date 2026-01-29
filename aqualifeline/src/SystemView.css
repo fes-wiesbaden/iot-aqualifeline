@@ -1,3 +1,46 @@
+:root {
+  --cerulean: hsla(194, 100%, 33%, 1);
+  --tropical-teal: hsla(183, 100%, 36%, 1);
+  --light-yellow: hsla(58, 89%, 93%, 1);
+  --soft-apricot: hsla(29, 97%, 86%, 1);
+  --vibrant-coral: hsla(4, 82%, 67%, 1);
+  --bright-coral: rgb(243, 82, 71);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
 #container {
-    background-color: beige;
+  background-color: var(--cerulean);
+  width: 100%;
+  height: 100vh;
+}
+
+p {
+  margin: 0;
+  color: var(--light-yellow);
+  text-align: center;
+  padding: 2rem;
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.chartwrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chartwrapper {
+  width: 50vw;
+  height: 50vh;
+  margin: 0 auto;
+  background-color: var(--light-yellow);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  border-radius: 1rem;
+  box-shadow: 0rem 0.4rem 0.8rem rgb(0, 0, 0, 0.7);
 }
