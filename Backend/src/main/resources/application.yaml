@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: Backend
+mqtt:
+  broker:
+    url: tcp://localhost:1883
+    client:
+      id:SpringBootClient
