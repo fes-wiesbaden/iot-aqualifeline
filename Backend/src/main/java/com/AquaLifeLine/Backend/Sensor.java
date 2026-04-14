@@ -1,6 +1,8 @@
 package com.AquaLifeLine.Backend;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -13,7 +15,8 @@ import lombok.Setter;
 @Entity
 public class Sensor {
     @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long sensor_id;
+    private Long id;
 
-    private String type;
+    @Enumerated(EnumType.STRING)//Falls mehr Sensorarten hinzukommen, in SensorType erweitern.
+    private SensorType sensorType;
 }

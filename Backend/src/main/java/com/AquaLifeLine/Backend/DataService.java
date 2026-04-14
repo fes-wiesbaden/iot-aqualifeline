@@ -4,31 +4,43 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class DataService {
+
+    private final DataRepository dataRepository;
+
+    public DataService(DataRepository dataRepository) {
+        this.dataRepository = dataRepository;
+    }
+
     public List<Data> getAllData(){
-        return List.of();
+        return this.dataRepository.findAll();
         
     }
 
     public Data saveData(Data data) {
-        return data;
+        return this.dataRepository.save(data);
     }
 
-    public List<Data> getDataByDeviceId(String deviceId) {
-        return List.of();
+    public List<Data> getDataByDeviceId(long deviceId) {
+        return this.dataRepository.findBySensor_id(deviceId);
     }
 
     public List<Data> getDataByTimestamp(LocalDateTime start, LocalDateTime end) {
-        
-        return List.of();
+        return this.dataRepository.findByTimestampBetween(start, end);
     }
 
-    public Data editData(Data data) {
-        return data;
+    public Data editData(long id, Data data) {
+    return this.dataRepository.findById(id)
+        .map(existingData -> {
+            existingData.setValue(data.getValue());
+            existingData.setTimestamp(data.getTimestamp());
+            existingData.setSensor(data.getSensor());
+            return this.dataRepository.save(existingData);
+        })
+        .orElseThrow(() -> new RuntimeException("Data not found with id " + id));
     }
 
     public void deleteData(long id) {
-        // TODO Auto-generated method stub
-        
+        this.dataRepository.deleteById(id);
     }
 
 }

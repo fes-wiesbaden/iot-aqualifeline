@@ -3,7 +3,9 @@ package com.AquaLifeLine.Backend;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/Daten")
+@RequestMapping("/daten")
 public class DataController {
     private final DataService dataService;
 
@@ -26,7 +28,7 @@ public class DataController {
     }
 
     @GetMapping("/device/{deviceId}")
-    public List<Data> getDataByDeviceId(@PathVariable String deviceId){
+    public List<Data> getDataByDeviceId(@PathVariable Long deviceId){
         return dataService.getDataByDeviceId(deviceId);
     }
 
@@ -40,12 +42,12 @@ public class DataController {
         return dataService.saveData(data);
     }
 
-    @PostMapping("/edit")
-    public Data editData(@RequestBody Data data){
-        return dataService.editData(data);
+    @PatchMapping("/edit/{id}")
+    public Data editData(@PathVariable long id, @RequestBody Data data){
+        return dataService.editData(id, data);
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void deleteData(@PathVariable long id){
         dataService.deleteData(id);
     }
