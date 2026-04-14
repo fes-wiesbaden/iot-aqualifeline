@@ -16,7 +16,6 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 public class Data {
-    //Erweitern je nach Sensoren die tatsächlich vorhanden sein können.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
