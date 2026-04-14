@@ -10,6 +10,7 @@
 body {
   margin: 0;
   padding: 0;
+    background-color: var(--cerulean);
 }
 
 #container {
@@ -51,6 +52,7 @@ h1 {
   padding: 3rem;
   border-radius: 1rem;
   box-shadow: 0rem 0.4rem 0.8rem rgb(0, 0, 0, 0.7);
+  margin-bottom: 3rem;
 }
 
 .add-chart {

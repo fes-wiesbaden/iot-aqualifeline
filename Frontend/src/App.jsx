@@ -1,6 +1,8 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
 import "./App.css";
 import SystemView from "./SystemView";
+import HomeButton from "./HomeButton";
+
 
 function LoggedIn() {
   return <SystemView />;
@@ -15,6 +17,7 @@ function App() {
         path="/"
         element={
           <header>
+            <HomeButton />
             <h1>AquaLifeline</h1>
             <input placeholder="E-MAIL" />
             <input placeholder="PASSWORD" />
@@ -24,7 +27,7 @@ function App() {
           </header>
         }
       />
-      <Route path="/loggedIn" element={<LoggedIn />} />
+      <Route path="/loggedIn" element={<><HomeButton /><LoggedIn /></>} />
     </Routes>
   );
 }
