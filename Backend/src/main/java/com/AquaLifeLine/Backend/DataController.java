@@ -1,5 +1,6 @@
 package com.AquaLifeLine.Backend;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,13 +25,29 @@ public class DataController {
         return dataService.getAllData();
     }
 
-    @GetMapping("/{id}")
-    public Data getDatabyId(@PathVariable long id){
-        return dataService.getDataById(id);
+    @GetMapping("/device/{deviceId}")
+    public List<Data> getDataByDeviceId(@PathVariable String deviceId){
+        return dataService.getDataByDeviceId(deviceId);
     }
 
-    @PostMapping
+    @GetMapping("/timestamp")
+    public List<Data> getDataByTimestamp(@RequestParam LocalDateTime start, @RequestParam LocalDateTime end){
+        return dataService.getDataByTimestamp(start, end);
+    }
+
+    @PostMapping("/create")
     public Data createData(@RequestBody Data data){
         return dataService.saveData(data);
     }
+
+    @PostMapping("/edit")
+    public Data editData(@RequestBody Data data){
+        return dataService.editData(data);
+    }
+
+    @PostMapping("/delete/{id}")
+    public void deleteData(@PathVariable long id){
+        dataService.deleteData(id);
+    }
+    
 }

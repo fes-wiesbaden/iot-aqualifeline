@@ -1,7 +1,9 @@
 package com.AquaLifeLine.Backend;
 
+import jakarta.persistence.Entity;
+
+@Entity
 public class User {
     String name;
-    double id;
-    String password;//temporary
+    long id;
 }

@@ -2,21 +2,22 @@ package com.AquaLifeLine.Backend;
 
 import java.time.LocalDateTime;
 
-import org.springframework.data.annotation.Id;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
 public class Data {
     //Erweitern je nach Sensoren die tatsächlich vorhanden sein können.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    double temperature;
+    double value;
     LocalDateTime timestamp;
 }
