@@ -2,9 +2,9 @@ spring:
   application:
     name: Backend
   datasource:
-    url: jdbc:postgresql://localhost:5432/aquarium_monitoring
+    url: supabase://db.ixhsglqjvavlqjzqgkzo.supabase.co:5432/postgres?sslmode=require
     username: postgres
-    password: DEIN_PASSWORT
+    password: start!1234
   jpa:
     hibernate:
       ddl-auto: update
