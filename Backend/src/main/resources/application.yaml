@@ -6,3 +6,16 @@ mqtt:
     url: tcp://localhost:1883
     client:
       id:SpringBootClient
+</> properties
+
+# PostgreSQL Verbindung
+spring.datasource.url=jdbc:postgresql://localhost:5432/aquarium_monitoring
+spring.datasource.username=postgres
+spring.datasource.password=DEIN_PASSWORT
+
+# JPA / Hibernate
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.hibernate.ddl-auto=update
+
+# Optional (Debug)
+spring.jpa.show-sql=true
