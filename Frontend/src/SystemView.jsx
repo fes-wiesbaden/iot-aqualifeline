@@ -75,65 +75,70 @@ function SystemView() {
   const [visible, setVisible] = useState(false);
 
   return (
-    <div id="container">
-      <h1>YOUR SYSTEMS</h1>
-      <div className="charts-container">
-        {charts.map((chart) => (
-          <div className="chartwrapper">
-            <Chart
-              key={chart.id}
-              id={chart.id}
-              type="line"
-              data={chart.data}
-              options={chart.options}
-            />
-          </div>
-        ))}
-          <div className="addchart-wrapper">
-            <Button
-              className="add-chart"
-              label=""
-              icon="pi pi-plus-circle"
-              onClick={() => setVisible(true)}
-            />
-            <Dialog
-              visible={visible}
-              modal
-              onHide={() => {
-                if (!visible) return;
-                setVisible(false);
-              }}
-              content={({ hide }) => (
-                <div
-                  className="dialog-wrapper"
-                >
-                  <div className="addchart-input">
-                    <label id="input-title">SERIAL ID:</label>
-                    <InputText
-                      id="serial-id"
-                      label="Serial ID"
-                    ></InputText>
-                  </div>
-                  <div className="btn-wrapper">
-                    <Button
-                      label="Add System"
-                      onClick={(e) => hide(e)}
-                      text
-                      className="btn"
-                    ></Button>
-                    <Button
-                      label="Cancel"
-                      onClick={(e) => hide(e)}
-                      text
-                      className="btn"
-                    ></Button>
-                  </div>
-                </div>
-              )}
-            ></Dialog>
+    <>
+      <div id="container" className={visible ? "blurred" : ""}>
+        <h1>YOUR SYSTEMS</h1>
+        <div className="charts-container">
+          {charts.map((chart) => (
+            <div className="chartwrapper">
+              <Chart
+                key={chart.id}
+                id={chart.id}
+                type="line"
+                data={chart.data}
+                options={chart.options}
+              />
+            </div>
+          ))}
         </div>
+        <div className="addchart-wrapper">
+          <Button
+            className="add-chart"
+            label=""
+            icon="pi pi-plus-circle"
+            onClick={() => setVisible(true)}
+          />
+        </div>
+
+        {/*always render backdrop and make it toggable*/}
+        <div
+          className={`backdrop ${visible ? "active" : ""}`}
+          onClick={() => setVisible(false)}
+        />
+
+        <Dialog
+          visible={visible}
+          modal
+          dismissableMask
+          onHide={() => {
+            if (!visible) return;
+            setVisible(false);
+          }}
+          content={({ hide }) => (
+            <div className="dialog-wrapper">
+              <div className="addchart-input">
+                <label id="input-title">SERIAL ID:</label>
+                <InputText id="serial-id" label="Serial ID"></InputText>
+              </div>
+              <div className="btn-wrapper">
+                <Button
+                  label="Add System"
+                  onClick={(e) => hide(e)}
+                  text
+                  className="btn"
+                ></Button>
+                <Button
+                  label="Cancel"
+                  onClick={(e) => hide(e)}
+                  text
+                  className="btn"
+                ></Button>
+              </div>
+            </div>
+          )}
+        ></Dialog>
       </div>
-    </div>
+    </>
   );
 }
 
