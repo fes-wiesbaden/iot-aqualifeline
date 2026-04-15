@@ -1,0 +1,8 @@
+Projekt 3 IOT
+Einrichten des Raspberry PI's:
+Downloaden Raspberry pI os 64 bit für den PI 4 über den PI Imager auf eine SD Karte.
+Erstellen eines Gruppenaccounts für den Raspberry PI.
+Erster Login auf dem Pi und Konfiguration des PI für das Projekt.
+Downloaden von Adruino Software für den Adruino.
+Downloaden des MQTT Brokers und der MQTT Clients.
+Erster Test Zwischen MQTT Sunscriber und MQTT Publisher ob die Kommunikation funktioniert.
