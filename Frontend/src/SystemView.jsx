@@ -3,13 +3,15 @@ import { Chart, Dialog, Button, InputText } from "primereact";
 import "primeicons/primeicons.css";
 import { useState } from "react";
 
-function SystemView() {
+
+function addSystem(hideElement, name, chartsArray, setCharts, lastId) {
+
   const data1 = {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
     datasets: [
       {
-        label: "Water Flow",
-        data: [12, 19, 8, 15, 22, 18],
+        label: "Water Quality",
+        data: [54, 76, 63, 230, 178, 102],
         fill: false,
         tension: 0.4,
       },
@@ -19,22 +21,23 @@ function SystemView() {
         fill: false,
         tension: 0.4,
       },
-    ],
-  };
-
-  const data2 = {
-    labels: ["Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep"],
-    datasets: [
       {
-        label: "Water Flow",
-        data: [34, 1, 83, 23, 65, 67, 42, 11],
+        label: "pH",
+        data: [6.7, 3.0, 12.0, 4.5, 5.1, 1.2],
+        fill: false,
+        tension: 0.4,
+      },
+      {
+        label: "Water Level",
+        data: [20, 15, 10, 5, 85, 74],
         fill: false,
         tension: 0.4,
       },
     ],
   };
 
-  const options1 = {
+
+  const options2 = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -45,7 +48,7 @@ function SystemView() {
       },
       title: {
         display: true,
-        text: "Dummy Chart",
+        text: name,
         font: {
           size: 30,
         },
@@ -68,18 +71,23 @@ function SystemView() {
     },
   };
 
-  const [charts, setCharts] = useState([
-    { id: 1, data: data1, options: options1 },
-    { id: 2, data: data2, options: options1 },
-  ]);
+  let newId = lastId+1;
+  setCharts([...chartsArray, {id: newId, data: data1, options: options2 }]);
+  hideElement();
+}
+
+function SystemView() {
+  
+  const [charts, setCharts] = useState([]);
   const [visible, setVisible] = useState(false);
+  const [serialId, setSerialId] = useState("");
 
   return (
     <>
       <div id="container" className={visible ? "blurred" : ""}>
         <h1>YOUR SYSTEMS</h1>
         <div className="charts-container">
-          {charts.map((chart) => (
+          {charts.length != 0 ? charts.map((chart) => (
             <div className="chartwrapper">
               <Chart
                 key={chart.id}
@@ -89,7 +97,7 @@ function SystemView() {
                 options={chart.options}
               />
             </div>
-          ))}
+          )) :  null}
         </div>
         <div className="addchart-wrapper">
           <Button
@@ -100,7 +108,7 @@ function SystemView() {
           />
         </div>
 
-        {/*always render backdrop and make it toggable*/}
+        {/*always render backdrop and make it toggable by clicking*/}
         <div
           className={`backdrop ${visible ? "active" : ""}`}
           onClick={() => setVisible(false)}
@@ -112,18 +120,18 @@ function SystemView() {
           dismissableMask
           onHide={() => {
             if (!visible) return;
-            setVisible(false);
+            setVisible(false); 
           }}
           content={({ hide }) => (
             <div className="dialog-wrapper">
               <div className="addchart-input">
                 <label id="input-title">SERIAL ID:</label>
-                <InputText id="serial-id" label="Serial ID"></InputText>
+                <InputText id="serial-id" label="Serial ID" onChange={(e) => setSerialId(e.target.value)}></InputText>
               </div>
               <div className="btn-wrapper">
                 <Button
                   label="Add System"
-                  onClick={(e) => hide(e)}
+                  onClick={(e) => addSystem(hide, serialId, charts, setCharts, charts.length > 0 ? charts.at(-1).id : 0)}
                   text
                   className="btn"
                 ></Button>
