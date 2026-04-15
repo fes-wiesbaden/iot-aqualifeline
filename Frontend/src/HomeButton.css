@@ -12,7 +12,7 @@
   position: fixed;
   top: 1rem;
   left: 1rem;
-  z-index: 1000;
+  z-index: 800;
 
   background-color: var(--vibrant-coral);
   border: none;

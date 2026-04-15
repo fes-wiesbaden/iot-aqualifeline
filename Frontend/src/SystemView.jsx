@@ -1,5 +1,5 @@
 import "./SystemView.css";
-import { Chart } from "primereact";
+import { Chart, Dialog, Button, InputText } from "primereact";
 import "primeicons/primeicons.css";
 import { useState } from "react";
 
@@ -18,7 +18,7 @@ function SystemView() {
         data: [19, 21, 23, 23, 22, 18],
         fill: false,
         tension: 0.4,
-      }
+      },
     ],
   };
 
@@ -43,16 +43,16 @@ function SystemView() {
           color: "#333",
         },
       },
-       title: {
-                display: true,
-                text: 'Dummy Chart',
-                font: {
-                  size: 30
-                },
-                padding: {
-                  bottom: 10
-                }
-            }
+      title: {
+        display: true,
+        text: "Dummy Chart",
+        font: {
+          size: 30,
+        },
+        padding: {
+          bottom: 10,
+        },
+      },
     },
     scales: {
       x: {
@@ -72,29 +72,73 @@ function SystemView() {
     { id: 1, data: data1, options: options1 },
     { id: 2, data: data2, options: options1 },
   ]);
+  const [visible, setVisible] = useState(false);
 
   return (
-    <div id="container">
-      <h1>YOUR SYSTEMS</h1>
-      <div className="charts-container">
-        {charts.map((chart) => (
-          <div className="chartwrapper">
-            <Chart
-              key={chart.id}
-              id={chart.id}
-              type="line"
-              data={chart.data}
-              options={chart.options}
-            />
-          </div>
-        ))}
-        <div className="addchart-wrapper">
-          <button className="add-chart" onClick={() => alert("bing")}>
-            <i className="pi pi-plus-circle"></i>
-          </button>
+    <>
+      <div id="container" className={visible ? "blurred" : ""}>
+        <h1>YOUR SYSTEMS</h1>
+        <div className="charts-container">
+          {charts.map((chart) => (
+            <div className="chartwrapper">
+              <Chart
+                key={chart.id}
+                id={chart.id}
+                type="line"
+                data={chart.data}
+                options={chart.options}
+              />
+            </div>
+          ))}
         </div>
+        <div className="addchart-wrapper">
+          <Button
+            className="add-chart"
+            label=""
+            icon="pi pi-plus-circle"
+            onClick={() => setVisible(true)}
+          />
+        </div>
+
+        {/*always render backdrop and make it toggable*/}
+        <div
+          className={`backdrop ${visible ? "active" : ""}`}
+          onClick={() => setVisible(false)}
+        />
+
+        <Dialog
+          visible={visible}
+          modal
+          dismissableMask
+          onHide={() => {
+            if (!visible) return;
+            setVisible(false);
+          }}
+          content={({ hide }) => (
+            <div className="dialog-wrapper">
+              <div className="addchart-input">
+                <label id="input-title">SERIAL ID:</label>
+                <InputText id="serial-id" label="Serial ID"></InputText>
+              </div>
+              <div className="btn-wrapper">
+                <Button
+                  label="Add System"
+                  onClick={(e) => hide(e)}
+                  text
+                  className="btn"
+                ></Button>
+                <Button
+                  label="Cancel"
+                  onClick={(e) => hide(e)}
+                  text
+                  className="btn"
+                ></Button>
+              </div>
+            </div>
+          )}
+        ></Dialog>
       </div>
-    </div>
+    </>
   );
 }
 
