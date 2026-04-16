@@ -2,9 +2,9 @@ spring:
   application:
     name: Backend
   datasource:
-    url: jdbc:postgresql://10.93.128.209:5432/postgres # Replace with valid Data
+    url: jdbc:postgresql://10.93.128.209:5432/aquarium_monitoring # Replace with valid Data
     username: postgres
-    password: postgres
+    password: Start1234!
   jpa:
     hibernate:
       ddl-auto: update
