@@ -6,7 +6,7 @@ function HomeButton() {
 const navigate = useNavigate();
   return (
     <button className="home" onClick={() => navigate("/")}>
-      <i className="pi pi-home"></i>
+      <img src="/AquaLifeline/light-yellow-icon.png" alt="HOME" />
     </button>
   );
 }

@@ -23,19 +23,36 @@ function App() {
         path="/"
         element={
           <>
-            <header>
+            <div className="homepage">
               <HomeButton />
               <h1 id="headtitle">AquaLifeline</h1>
+              <button className="loginnav" onClick={() => navigate("/login")}>
+                LOGIN
+              </button>
+            </div>
+            <Footer />
+          </>
+        }
+      />
+
+        <Route
+        path="/login"
+        element={
+          <>
+            <div className="login">
+              <HomeButton />
+              <h1 id="logintitle">AquaLifeline</h1>
               <input placeholder="E-MAIL" />
               <input placeholder="PASSWORD" />
               <button className="submit" onClick={() => navigate("/loggedIn")}>
                 LOGIN
               </button>
-            </header>
+            </div>
             <Footer />
           </>
         }
       />
+
       <Route
         path="/loggedIn"
         element={

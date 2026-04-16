@@ -1,7 +1,5 @@
 package com.AquaLifeLine.Backend;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,9 +10,15 @@ public class AquariumService {
         this.aquariumRepository = aquariumRepository;
     }
 
+    public boolean existsBySerialNumber(String serialNumber) {
+        return this.aquariumRepository.existsBySerialNumber(serialNumber);
+    }
+    /* 
     public List<Aquarium> getAllAquariums() {
         return this.aquariumRepository.findAll();
     }
+    */
+
     public Aquarium saveAquarium(Aquarium aquarium) {
         return this.aquariumRepository.save(aquarium);
     }

@@ -18,7 +18,7 @@
   border: none;
   border-radius: 25%;
   color: white;
-  padding: 1rem;
+  padding: 0.5rem;
   font-size: 2rem;
   transition: 0.2s ease;
   box-shadow: 0rem 0.3rem 0.5rem rgb(0, 0, 0, 0.3);
@@ -27,4 +27,9 @@
 .home:hover {
   transition: 0.2s ease;
   background-color: var(--bright-coral);
+}
+
+img {
+  max-width: 4rem;
+  max-height: auto;
 }
