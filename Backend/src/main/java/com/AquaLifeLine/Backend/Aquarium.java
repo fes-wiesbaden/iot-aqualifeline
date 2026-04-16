@@ -1,5 +1,6 @@
 package com.AquaLifeLine.Backend;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +20,9 @@ public class Aquarium {
     private Long id;
 
     private Long serienNummer;
+
+    @Column(unique = true)
+    private String SerialNumber;
 
     @ManyToOne
     @JoinColumn(name="kunde_id", nullable=false)
