@@ -32,7 +32,8 @@ public class MqttConfig {
     @Bean
     public MqttPahoMessageDrivenChannelAdapter adapter() {
         MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(clientId,
-                mqttClientFactory(), "sensor/#");
+                mqttClientFactory(), 
+                "aquarium/#");
         adapter.setOutputChannel(mqttInputChannel());
         return adapter;
     }
