@@ -6,3 +6,10 @@ Erster Login auf dem Pi und Konfiguration des PI für das Projekt.
 Downloaden von Adruino Software für den Adruino.
 Downloaden des MQTT Brokers und der MQTT Clients.
 Erster Test Zwischen MQTT Sunscriber und MQTT Publisher ob die Kommunikation funktioniert.
+
+static IPs:
+Database:   10.93.128.209
+Backend:    10.93.128.210
+Arduino:    10.93.128.211
+Free:       10.93.128.212
+            10.93.128.213
