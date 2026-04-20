@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "BackendApplication",
+            "request": "launch",
+            "mainClass": "com.AquaLifeLine.Backend.BackendApplication",
+            "projectName": "Backend"
+        },
+        {
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",

@@ -11,6 +11,6 @@ spring:
     show-sql: true
 mqtt:
   broker:
-    url: tcp://localhost:1883
+    url: tcp://10.93.128.211:1883
     client:
       id:SpringBootClient
