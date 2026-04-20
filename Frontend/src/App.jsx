@@ -25,17 +25,29 @@ function App() {
           <>
             <div className="homepage">
               <HomeButton />
-              <h1 id="headtitle">AquaLifeline</h1>
+              <div className="greeting">
+                <h1 id="headtitle">AquaLifeline.</h1>
+                <h2 id="headsubtitle">Kleine Fische. Große Ansprüche.</h2>
+              </div>
+              <img
+                src="/AquaLifeline/landingpage1.jpg"
+                alt="Aquarium"
+                id="landingpage-pic"
+              />
+              {
+              /*
               <button className="loginnav" onClick={() => navigate("/login")}>
                 LOGIN
               </button>
+            */
+        }
             </div>
             <Footer />
           </>
         }
       />
 
-        <Route
+      <Route
         path="/login"
         element={
           <>
@@ -68,7 +80,7 @@ function App() {
         element={
           <>
             <HomeButton />
-            <Legal/>
+            <Legal />
           </>
         }
       />

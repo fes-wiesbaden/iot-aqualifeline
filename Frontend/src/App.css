@@ -17,6 +17,13 @@ p, h1, h2, h3 {
   user-select: none;
 }
 
+#landingpage-pic {
+  position: absolute;
+  width: 100%;
+  min-width: 100%;
+  z-index: 0;
+}
+
 .homepage {
   display: flex;
   position: relative;
@@ -46,16 +53,41 @@ button {
   cursor: pointer;
 }
 
+.greeting {
+  position: relative;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0rem;
+}
 
 #headtitle {
+  margin: 0;
   color: var(--light-yellow);
-  letter-spacing: 2rem;
+  letter-spacing: 1.3rem;
   transition: 0.3s ease;
   cursor: default;
   font-size: 8rem;
 }
 
-#hedatitle:hover {
+#headtitle:hover {
+  color: var(--soft-apricot);
+  transform: scaleX(1.1);
+  transition: 0.3s ease;
+}
+
+#headsubtitle {
+  margin: 0;
+  white-space: nowrap;
+  color: var(--light-yellow);
+  letter-spacing: 0.5rem;
+  transition: 0.3s ease;
+  cursor: default;
+  font-size: 2.25rem;
+}
+
+#headsubtitle:hover {
   color: var(--soft-apricot);
   transform: scaleX(1.1);
   transition: 0.3s ease;
