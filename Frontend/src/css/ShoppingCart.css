@@ -1,0 +1,35 @@
+:root {
+  --cerulean: hsla(194, 100%, 33%, 1);
+  --tropical-teal: hsla(183, 100%, 36%, 1);
+  --light-yellow: hsla(58, 89%, 93%, 1);
+  --soft-apricot: hsla(29, 97%, 86%, 1);
+  --vibrant-coral: hsla(4, 82%, 67%, 1);
+  --bright-coral: rgb(243, 82, 71);
+}
+
+.shopping-cart {
+  display: inline-flex;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 800;
+
+  background-color: var(--tropical-teal);
+  border: none;
+  border-radius: 25%;
+  color: var(--light-yellow);
+  padding: 0.5rem;
+  transition: 0.2s ease;
+  box-shadow: 0rem 0.3rem 0.5rem rgb(0, 0, 0, 0.3);
+}
+
+.shopping-cart:hover {
+  transition: 0.2s ease;
+  background-color: var(--light-yellow);
+  color: var(--tropical-teal);
+}
+
+.shopping-cart i {
+    font-size: 2rem;
+    padding: 1rem;   
+}

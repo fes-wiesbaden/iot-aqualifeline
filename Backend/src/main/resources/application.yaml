@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: Backend
+  datasource:
+    url: jdbc:postgresql://db.ujehebzgakjirryxiixm.supabase.co:5432/postgres?sslmode=require # Replace with valid Data
+    username: postgres
+    password: Start13579Start135
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+mqtt:
+  broker:
+    url: tcp://10.93.128.211:1883
+    client:
+      id: SpringBootClient

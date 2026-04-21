@@ -1,0 +1,40 @@
+footer {
+  display: flex;
+  width: 100%;
+  background-color: var(--soft-apricot);
+  font-size: 1.2rem;
+  flex-direction: column;
+}
+
+footer h1 {
+  color: var(--cerulean);
+  font-size: 1.8rem;
+  letter-spacing: 1.8rem;
+  font-weight: bold;
+  background-color: var(--light-yellow);
+  margin-bottom: 1rem;
+}
+
+footer h1:hover {
+  cursor: default;
+}
+
+footer a {
+  text-decoration: none;
+}
+
+footer p {
+  font-weight: bold;
+  margin: 0.5rem;
+  font-size: 1rem;
+  padding-left: 1.5rem;
+  letter-spacing: 0.22rem;
+}
+
+.footerinside {
+  padding: 2rem;
+}
+
+* {
+  font-family: Helvetica, sans-serif;
+}

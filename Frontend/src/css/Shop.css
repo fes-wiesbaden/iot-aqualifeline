@@ -1,0 +1,96 @@
+:root {
+  --cerulean: hsla(194, 100%, 33%, 1);
+  --tropical-teal: hsla(183, 100%, 36%, 1);
+  --light-yellow: hsla(58, 89%, 93%, 1);
+  --soft-apricot: hsla(29, 97%, 86%, 1);
+  --vibrant-coral: hsla(4, 82%, 67%, 1);
+  --bright-coral: rgb(243, 82, 71);
+}
+
+.products {
+  background-color: var(--tropical-teal);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 0;
+  gap: 1.5rem;
+}
+
+.product-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 60%;
+  background-color: var(--light-yellow);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  gap: 2rem;
+  box-shadow: 0rem 0.4rem 0.8rem rgb(0, 0, 0, 0.7);
+}
+
+.prod-img {
+  min-width: 10rem;
+  height: 10rem;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  flex-shrink: 0;
+}
+
+.prod-data-wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+}
+
+.prod-buy-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.prod-price {
+  font-size: 1.5rem;
+}
+
+.prod-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.prod-lesser-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.prod-tag {
+  display: flex;
+  flex-direction: row;
+  gap: 0.25rem;
+}
+
+.prod-inv-status {
+    font-size: 0.75rem;
+}
+
+.prod-name {
+  font-size: 1.25rem;
+  font-weight: bold;
+  letter-spacing: 0.2rem;
+}
+
+.prod-shop-button {
+  min-width: 5rem;
+  height: 10rem;
+  padding: 0;
+  border-radius: 1rem;
+}
+
+.prod-shop-button .p-button-icon {
+  font-size: 1.5rem;
+}

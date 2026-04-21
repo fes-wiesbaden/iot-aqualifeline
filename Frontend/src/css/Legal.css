@@ -1,0 +1,48 @@
+:root {
+  --cerulean: hsla(194, 100%, 33%, 1);
+  --tropical-teal: hsla(183, 100%, 36%, 1);
+  --light-yellow: hsla(58, 89%, 93%, 1);
+  --soft-apricot: hsla(29, 97%, 86%, 1);
+  --vibrant-coral: hsla(4, 82%, 67%, 1);
+  --bright-coral: rgb(243, 82, 71);
+}
+
+.impressum,
+.agb,
+.datenschutz {
+  color: var(--light-yellow);
+  margin: 0 20rem;
+}
+
+.impressum p,
+.agb p,
+.datenschutz p {
+  font-size: 1.25rem;
+}
+
+.impressum h1,
+.agb h1,
+.datenschutz h1 {
+  color: var(--vibrant-coral);
+  text-shadow: 0rem 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+}
+
+.impressum h2,
+.agb h2,
+.datenschutz h2 {
+  font-size: 1.75rem;
+  letter-spacing: 0.15rem;
+}
+
+.impressum h3 {
+  font-size: 1.5rem;
+}
+
+.impressum {
+}
+
+.agb {
+}
+
+.datenschutz {
+}
