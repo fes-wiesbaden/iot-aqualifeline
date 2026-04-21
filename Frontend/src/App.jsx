@@ -31,7 +31,7 @@ function App() {
                 <h2 id="headsubtitle">Kleine Fische. Große Ansprüche.</h2>
               </div>
               <img
-                src="/AquaLifeline/landingpage1.jpg"
+                src="/iot-aqualifeline/landingpage1.jpg"
                 alt="Aquarium"
                 id="landingpage-pic"
               />
