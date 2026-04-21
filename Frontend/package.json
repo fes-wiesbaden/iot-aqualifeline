@@ -1,6 +1,6 @@
 {
   "name": "aqualifeline",
-  "homepage": "https://vertygore.github.io/AquaLifeline",
+  "homepage": "https://github.com/fes-wiesbaden/iot-aqualifeline",
   "private": true,
   "version": "0.0.0",
   "type": "module",
