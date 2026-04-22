@@ -96,7 +96,7 @@ function ShoppingCart() {
 
     return (
       <div className={`cart-products ${visibleCart ? "active" : ""}`}>
-        <span className="cart-headline">YOUR SHOPPING CART</span>
+        <span className="cart-headline">YOUR SHOPPING CART ({shoppingCart.length})</span>
         {list}
       </div>
     );
@@ -106,7 +106,7 @@ function ShoppingCart() {
   return (
     <div className="shopping-cart">
       <button
-        className="shopping-cart-btn"
+        className={`shopping-cart-btn ${visibleCart ? "active" : ""}`}
         onClick={
           () =>
             setVisibleCart(

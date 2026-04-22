@@ -22,12 +22,12 @@
   display: inline-flex;
   position: fixed;
   top: 1rem;
-  right: 1rem;
-  z-index: 800;
+  right: 2rem;
+  z-index: 850;
 
   background-color: var(--tropical-teal);
   border: none;
-  border-radius: 25%;
+  border-radius: 1rem;
   color: var(--light-yellow);
   padding: 0.5rem;
   transition: 0.2s ease;
@@ -47,24 +47,48 @@
 
 .shopping-cart {
   z-index: 750;
-  position: relative;
+  display: inline-flex;
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 800;
+}
+
+.shopping-cart-btn.active {
+  box-shadow: none;
+  background-color: var(--light-yellow);
+  color: var(--tropical-teal);
+}
+.shopping-cart-btn.active:hover {
+  box-shadow: 0rem 0.3rem 0.5rem rgb(0, 0, 0, 0.3);
+  background-color: var(--tropical-teal);
+  color: var(--light-yellow);
 }
 
 .cart-products {
-  display: none;
+  visibility: hidden;
   background-color: var(--light-yellow);
   border-radius: 1rem;
+  transform: scale(0);
+  transform-origin: top right;
   position: absolute;
   right: 1rem;
   padding: 2rem;
-  max-height: 50vh;
+  max-height: 60vh;
   min-width: 40vw;
   overflow-y: auto;
   box-shadow: 0rem 0.4rem 0.7rem rgb(0, 0, 0, 0.7);
+  opacity: 0;
+  transition:
+    transform 0.2s ease,
+    opacity 0.3s ease,
+    visibility 0.3s ease;
 }
 
 .cart-products.active {
-  display: block;
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
 }
 
 .cart-wrap {
@@ -73,7 +97,7 @@
   align-items: center;
   gap: 1rem;
   background-color: var(--soft-apricot);
-  padding: 2rem 1rem;
+  padding: 1rem 1rem;
   border-radius: 1rem;
   margin: 1rem 0;
   box-shadow: 0rem 0.2rem 0.7rem rgb(0, 0, 0, 0.3);
@@ -99,16 +123,24 @@
 }
 
 .cart-prod-img {
-  width: 4rem;
-  height: 4rem;
+  min-width: 6rem;
+  height: 6rem;
   object-fit: cover;
   border-radius: 0.5rem;
   flex-shrink: 0;
 }
 
-.cart-prod-add-button, .cart-prod-subtract-button, .cart-prod-delete-button {
-    max-width: 2rem;
-    max-height: 2rem;
+.cart-prod-add-button,
+.cart-prod-subtract-button,
+.cart-prod-delete-button {
+  max-width: 2rem;
+  max-height: 2rem;
+  border: none;
+}
+
+.cart-prod-delete-button {
+  background-color: var(--bright-coral);
+
 }
 
 .prod-count .p-inputnumber-input {
