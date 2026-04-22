@@ -1,18 +1,19 @@
+#include <PubSubClient.h>
 #include <WiFiS3.h>
 #include <ArduinoMqttClient.h>
 
 // WLAN Zugangsdaten
-char ssid[] = "DEINE_WLAN_SSID";
-char pass[] = "DEIN_WLAN_PASSWORT";
+char ssid[] = "FES-SuS";
+char pass[] = "SuS-WLAN!Key24";
 
 // MQTT Setup
 WiFiClient wifiClient;
 MqttClient mqttClient(wifiClient);
 
-const char broker[] = "192.168.178.XX"; // IP deines Brokers (z.B. Raspberry Pi)
+const char broker[] = "10.93.128.211"; // IP deines Brokers (z.B. Raspberry Pi)
 int        port     = 1883;
 const char topicTDS[]  = "aquarium/tds";
-const char topicWater[] = "aquarium/wasserstand";
+const char topicWater[] = "aquarium/sensoren";
 
 // Pins
 const int tdsPin = A0;
