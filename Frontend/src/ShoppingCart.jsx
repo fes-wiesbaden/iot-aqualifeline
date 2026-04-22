@@ -7,10 +7,21 @@ import "primeicons/primeicons.css";
 
 function ShoppingCart() {
   const [shoppingCart, setShoppingCart] = useState([]);
-  const [prodValue, setProdValue] = useState([]);
-  const [visibleCart, setVisibleCart] = useState(false);
-  const [mounted, setMounted] = useState(true);  /** delay to let css settle animations first */
+  const updateCount = (id, method) => {
+    setShoppingCart((prev) =>
+      prev.map((product) => {
+        if (product.id !== id) return product;
+        return {
+          ...product,
+          count: method === "add" ? product.count + 1 : product.count - 1,
+        };
+      }),
+    );
+  };
 
+  const [visibleCart, setVisibleCart] = useState(false);
+  const [mounted, setMounted] = useState(true);
+  /** delay to let css settle animations first */
 
   useEffect(() => {
     const dummyShoppingCartData = [
@@ -57,15 +68,20 @@ function ShoppingCart() {
           </div>
 
           <div className="cart-prod-lesserinfo-wrap">
-            <Button icon="pi pi-plus" className="cart-prod-add-button"></Button>
+            <Button
+              icon="pi pi-plus"
+              className="cart-prod-add-button"
+              onClick={() => updateCount(product.id, "add")}
+            ></Button>
             <InputNumber
               className="prod-count"
               value={product.count}
-              onValueChange={
-                (e) =>
-                  setProdValue(
-                    e.value,
-                  ) /* TODO: Function to edit item count in shopping Cart when changing */
+              onValueChange={(e) =>
+                setShoppingCart((prev) =>
+                  prev.map((p) =>
+                    p.id === product.id ? { ...p, count: e.value } : p,
+                  ),
+                )
               }
               min={1}
               max={99}
@@ -73,6 +89,7 @@ function ShoppingCart() {
             <Button
               icon="pi pi-minus"
               className="cart-prod-subtract-button"
+              onClick={() => updateCount(product.id, "subtract")}
             ></Button>
             <Button
               icon="pi pi-trash"
@@ -83,7 +100,6 @@ function ShoppingCart() {
       </div>
     );
   };
-
 
   const navigate = useNavigate();
   return (
@@ -103,11 +119,13 @@ function ShoppingCart() {
       </button>
 
       {mounted && (
-      <div className={`cart-products ${visibleCart ? "active" : ""}`}>
-        <span className="cart-headline">YOUR SHOPPING CART ({shoppingCart.length})</span>
-        {shoppingCart.map((product, index) => itemTemplate(product, index))}
-      </div>
-    )}
+        <div className={`cart-products ${visibleCart ? "active" : ""}`}>
+          <span className="cart-headline">
+            YOUR SHOPPING CART ({shoppingCart.length})
+          </span>
+          {shoppingCart.map((product, index) => itemTemplate(product, index))}
+        </div>
+      )}
     </div>
   );
 }
