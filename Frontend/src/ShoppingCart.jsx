@@ -1,11 +1,6 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { OrderList } from "primereact/orderlist";
-import { ProductService } from "./service/ProductService";
 import { Button } from "primereact/button";
-import { DataView } from "primereact/dataview";
-import { Rating } from "primereact/rating";
-import { classNames } from "primereact/utils";
 import { InputNumber } from "primereact/inputnumber";
 import "./css/ShoppingCart.css";
 import "primeicons/primeicons.css";
@@ -14,12 +9,9 @@ function ShoppingCart() {
   const [shoppingCart, setShoppingCart] = useState([]);
   const [prodValue, setProdValue] = useState([]);
   const [visibleCart, setVisibleCart] = useState(false);
+  const [mounted, setMounted] = useState(true);  /** delay to let css settle animations first */
 
-  /*
-  useEffect(() => {
-    ProductService.getProductsSmall().then((data) => setProducts(data));
-  }, []);
-  */
+
   useEffect(() => {
     const dummyShoppingCartData = [
       {
@@ -28,7 +20,7 @@ function ShoppingCart() {
         image: "bamboo-watch.jpg",
         price: 65.99,
         rating: 4,
-        count: 2
+        count: 2,
       },
       {
         id: "1001",
@@ -36,7 +28,7 @@ function ShoppingCart() {
         image: "black-watch.jpg",
         price: 72.99,
         rating: 4,
-        count: 1
+        count: 1,
       },
       {
         id: "1002",
@@ -44,7 +36,7 @@ function ShoppingCart() {
         image: "blue-band.jpg",
         price: 79.99,
         rating: 3,
-        count: 20
+        count: 20,
       },
     ];
     setShoppingCart(dummyShoppingCartData);
@@ -69,7 +61,12 @@ function ShoppingCart() {
             <InputNumber
               className="prod-count"
               value={product.count}
-              onValueChange={(e) => setProdValue(e.value) /* TODO: Function to edit item count in shopping Cart when changing */}
+              onValueChange={
+                (e) =>
+                  setProdValue(
+                    e.value,
+                  ) /* TODO: Function to edit item count in shopping Cart when changing */
+              }
               min={1}
               max={99}
             />
@@ -87,20 +84,6 @@ function ShoppingCart() {
     );
   };
 
-  const listTemplate = (items) => {
-    if (!items || items.length === 0) return null;
-
-    let list = items.map((product, index) => {
-      return itemTemplate(product, index);
-    });
-
-    return (
-      <div className={`cart-products ${visibleCart ? "active" : ""}`}>
-        <span className="cart-headline">YOUR SHOPPING CART ({shoppingCart.length})</span>
-        {list}
-      </div>
-    );
-  };
 
   const navigate = useNavigate();
   return (
@@ -114,10 +97,17 @@ function ShoppingCart() {
             ) /* toggle the cart visibility on ACTUAL current value*/
         }
       >
-        <i className="pi pi-shopping-cart"></i>
+        <i
+          className={`${visibleCart ? "pi pi-times" : "pi pi-shopping-cart"}`}
+        ></i>
       </button>
 
-      <DataView value={shoppingCart} listTemplate={listTemplate} />
+      {mounted && (
+      <div className={`cart-products ${visibleCart ? "active" : ""}`}>
+        <span className="cart-headline">YOUR SHOPPING CART ({shoppingCart.length})</span>
+        {shoppingCart.map((product, index) => itemTemplate(product, index))}
+      </div>
+    )}
     </div>
   );
 }

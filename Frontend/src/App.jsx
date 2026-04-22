@@ -72,6 +72,7 @@ function App() {
           <>
             <HomeButton />
             <LoggedIn />
+            <Footer/>
           </>
         }
       />
@@ -92,6 +93,7 @@ function App() {
           <>
             <HomeButton />
             <Shop />
+            <Footer/>
           </>
         }
       />
