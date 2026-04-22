@@ -110,8 +110,15 @@ function SystemView() {
                   selectionMode="range"
                   readOnlyInput
                   hideOnRangeSelection
+                  showTime
+                  showSeconds
+                  hourFormat="24"
                 />
               </div>
+              <Button
+                icon="pi pi-refresh"
+                className="refresh-chart-data"
+              ></Button>
             </div>
           ))}
         </div>
@@ -144,6 +151,7 @@ function SystemView() {
                 <label id="input-title">SERIAL ID:</label>
                 <InputText
                   id="serial-id"
+                  className="default-input"
                   label="Serial ID"
                   onChange={(e) => setSerialId(e.target.value)}
                 ></InputText>

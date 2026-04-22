@@ -136,7 +136,7 @@ button {
 }
 
 
-input {
+.default-input {
   text-align: center;
   font-size: 1.2rem;
   font-weight: bold;
@@ -151,7 +151,7 @@ input {
   color: var(--light-yellow);
 }
 
-input:hover {
+.default-input:hover {
   transition: 0.4s ease;
   transform: scale(1.1);
   padding: 0.75rem 5rem;

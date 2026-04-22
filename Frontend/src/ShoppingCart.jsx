@@ -1,13 +1,124 @@
 import { Routes, Route, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { OrderList } from "primereact/orderlist";
+import { ProductService } from "./service/ProductService";
+import { Button } from "primereact/button";
+import { DataView } from "primereact/dataview";
+import { Rating } from "primereact/rating";
+import { classNames } from "primereact/utils";
+import { InputNumber } from "primereact/inputnumber";
 import "./css/ShoppingCart.css";
 import "primeicons/primeicons.css";
 
 function ShoppingCart() {
-const navigate = useNavigate();
+  const [shoppingCart, setShoppingCart] = useState([]);
+  const [prodValue, setProdValue] = useState([]);
+  const [visibleCart, setVisibleCart] = useState(false);
+
+  /*
+  useEffect(() => {
+    ProductService.getProductsSmall().then((data) => setProducts(data));
+  }, []);
+  */
+  useEffect(() => {
+    const dummyShoppingCartData = [
+      {
+        id: "1000",
+        name: "Bamboo Watch",
+        image: "bamboo-watch.jpg",
+        price: 65.99,
+        rating: 4,
+        count: 2
+      },
+      {
+        id: "1001",
+        name: "Black Watch",
+        image: "black-watch.jpg",
+        price: 72.99,
+        rating: 4,
+        count: 1
+      },
+      {
+        id: "1002",
+        name: "Blue Band",
+        image: "blue-band.jpg",
+        price: 79.99,
+        rating: 3,
+        count: 20
+      },
+    ];
+    setShoppingCart(dummyShoppingCartData);
+  }, []);
+
+  const itemTemplate = (product, index) => {
+    return (
+      <div className="cart-wrap" key={product.id}>
+        <img
+          className="cart-prod-img"
+          src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`}
+          alt={product.name}
+        />
+        <div className="cart-prod-data-wrap">
+          <div className="cart-prod-info">
+            <div className="cart-prod-name">{product.name}</div>
+            <span className="cart-prod-price">{product.price}€</span>
+          </div>
+
+          <div className="cart-prod-lesserinfo-wrap">
+            <Button icon="pi pi-plus" className="cart-prod-add-button"></Button>
+            <InputNumber
+              className="prod-count"
+              value={product.count}
+              onValueChange={(e) => setProdValue(e.value) /* TODO: Function to edit item count in shopping Cart when changing */}
+              min={1}
+              max={99}
+            />
+            <Button
+              icon="pi pi-minus"
+              className="cart-prod-subtract-button"
+            ></Button>
+            <Button
+              icon="pi pi-trash"
+              className="cart-prod-delete-button"
+            ></Button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const listTemplate = (items) => {
+    if (!items || items.length === 0) return null;
+
+    let list = items.map((product, index) => {
+      return itemTemplate(product, index);
+    });
+
+    return (
+      <div className={`cart-products ${visibleCart ? "active" : ""}`}>
+        <span className="cart-headline">YOUR SHOPPING CART</span>
+        {list}
+      </div>
+    );
+  };
+
+  const navigate = useNavigate();
   return (
-    <button className="shopping-cart" onClick={() => alert("bing")}>
+    <div className="shopping-cart">
+      <button
+        className="shopping-cart-btn"
+        onClick={
+          () =>
+            setVisibleCart(
+              (prev) => !prev,
+            ) /* toggle the cart visibility on ACTUAL current value*/
+        }
+      >
         <i className="pi pi-shopping-cart"></i>
-    </button>
+      </button>
+
+      <DataView value={shoppingCart} listTemplate={listTemplate} />
+    </div>
   );
 }
 

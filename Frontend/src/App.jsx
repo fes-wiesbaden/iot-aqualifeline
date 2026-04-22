@@ -55,8 +55,8 @@ function App() {
             <div className="login">
               <HomeButton />
               <h1 id="logintitle">AquaLifeline</h1>
-              <input placeholder="E-MAIL" />
-              <input placeholder="PASSWORD" />
+              <input className="default-input" placeholder="USERNAME" />
+              <input className="default-input" placeholder="PASSWORD" />
               <button className="submit" onClick={() => navigate("/loggedIn")}>
                 LOGIN
               </button>
