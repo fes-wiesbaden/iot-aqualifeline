@@ -5,10 +5,10 @@
 // ==========================================
 // ⚙️ KONFIGURATION
 // ==========================================
-
+//WLAN Verbindungsdaten
 const char* ssid = "FES-SuS";
 const char* password = "SuS-WLAN!Key24";
-
+//MQTT Verbindungsdaten
 const char* mqtt_server = "10.93.128.211";
 const int mqtt_port = 1883;
 const char* mqtt_user = "DEIN_MQTT_USER"; // Falls benötigt, sonst ""
@@ -17,7 +17,7 @@ const char* mqtt_pass = "DEIN_MQTT_PASS"; // Falls benötigt, sonst ""
 // MQTT Topics angepasst für JSON
 const char* publish_topic = "sensor/aquarium/data";
 const char* subscribe_topic = "sensor/aquarium/command";
-
+//Adruino Analogpin Konfiguration
 #define TDS_PIN A0
 #define WATERLEVEL_PIN A1
 #define PH A2
@@ -158,7 +158,6 @@ void loop() {
     JsonDocument doc;
     
     // Daten in das JSON-Dokument eintragen
-    // Du kannst hier leicht weitere Daten hinzufügen
     // Syntax = doc["status"] = "online";    
     doc["Wasserqualitaet"] = tdsRaw;
     doc["Wasserstand"] = waterLevelRaw;
