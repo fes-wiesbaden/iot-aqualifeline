@@ -20,6 +20,8 @@ const char* subscribe_topic = "sensor/aquarium/command";
 
 #define TDS_PIN A0
 #define WATERLEVEL_PIN A1
+#define PH A2
+#define Temperatur A3
 
 // 'const' entfernt, damit wir das Intervall per MQTT (JSON) ändern können
 unsigned long publishInterval = 5000; 
@@ -147,18 +149,21 @@ void loop() {
 
     int tdsRaw = analogRead(TDS_PIN);
     int waterLevelRaw = analogRead(WATERLEVEL_PIN);
+    int rawPH = analogRead(PH);
+    int rawTemp = analogRead(Temperatur);
 
     // ==========================================
-    // 📤 JSON ERSTELLEN UND SENDEN
+    //  JSON ERSTELLEN UND SENDEN
     // ==========================================
     JsonDocument doc;
     
     // Daten in das JSON-Dokument eintragen
+    // Du kannst hier leicht weitere Daten hinzufügen
+    // Syntax = doc["status"] = "online";    
     doc["Wasserqualitaet"] = tdsRaw;
     doc["Wasserstand"] = waterLevelRaw;
-    
-    // (Optional) Du kannst hier leicht weitere Daten hinzufügen
-    // doc["status"] = "online";
+    doc["PH-Wert"] = rawPH;
+    doc["Temperatur"] = rawTemp;
 
     // JSON in einen String umwandeln
     String jsonOutput;
