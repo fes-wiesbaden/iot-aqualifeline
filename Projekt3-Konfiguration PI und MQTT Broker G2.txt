@@ -7,11 +7,11 @@ Downloaden von Adruino Software für den Adruino.
 Downloaden des MQTT Brokers und der MQTT Clients.
 Erster Test Zwischen MQTT Sunscriber und MQTT Publisher ob die Kommunikation funktioniert.
 
-static IPs:
-Database:   10.93.128.209
-Backend:    10.93.128.210
-Arduino:    10.93.128.211
-Free:       10.93.128.212
-            10.93.128.213
+Static IPV4-Adresses:
+Database:               10.93.128.209
+Backend:                10.93.128.210
+RaspberryPI:            10.93.128.211
+Free:                   10.93.128.212
+                        10.93.128.213
 
-10.93.143.12
+
