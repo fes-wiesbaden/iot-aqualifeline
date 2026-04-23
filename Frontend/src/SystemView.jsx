@@ -92,6 +92,9 @@ function SystemView() {
     <>
       <div id="container" className={visible ? "blurred" : ""}>
         <h1>YOUR SYSTEMS</h1>
+        {charts.length == 0 && (
+          <h2 className="nosystems-warning">No systems added yet</h2>
+        )}
         <div className="charts-container">
           {charts.map((chart) => (
             <div className="chart-group" key={chart.id}>
@@ -101,24 +104,30 @@ function SystemView() {
                   type="line"
                   data={chart.data}
                   options={chart.options}
+                  style={{ width: "100%", height: "100%" }}
                 />
               </div>
-              <div className="calendar-wrapper">
-                <Calendar
-                  value={dates}
-                  onChange={(e) => setDates(e.value)}
-                  selectionMode="range"
-                  readOnlyInput
-                  hideOnRangeSelection
-                  showTime
-                  showSeconds
-                  hourFormat="24"
-                />
+              <div className="chart-extras">
+                <div className="calendar-wrapper">
+                  <h2 className="calendar-title">Timespan:</h2>
+                  <Calendar
+                    value={dates}
+                    onChange={(e) => setDates(e.value)}
+                    selectionMode="range"
+                    readOnlyInput
+                    hideOnRangeSelection
+                    showTime
+                    hourFormat="24"
+                    dateFormat="dd-mm-yy /"
+                  />
+                </div>
+                <Button
+                  icon="pi pi-refresh"
+                  className="refresh-chart-data"
+                  tooltip="fetch newest data for this device"
+                  tooltipOptions={{position: 'top', showDelay: 500, hideDelay: 100}}
+                ></Button>
               </div>
-              <Button
-                icon="pi pi-refresh"
-                className="refresh-chart-data"
-              ></Button>
             </div>
           ))}
         </div>

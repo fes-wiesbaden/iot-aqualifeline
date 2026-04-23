@@ -18,7 +18,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const validateEmail = (email) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); /** regex */
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); /** regex for email */
   };
 
   const clearInputs = () => {
@@ -60,6 +60,7 @@ function Login() {
         });
         setIsRegistering(false);
       } else {
+
         toast.current?.show({
           severity: "error",
           summary: "Error",
@@ -114,6 +115,9 @@ function Login() {
           placeholder="EMAIL"
           value={email}
           autoComplete="off"
+          tabIndex={
+            !isRegistering ? -1 : 0
+          } /** removes it from tab cycle when hidden */
           type="email"
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -135,6 +139,9 @@ function Login() {
           className="default-input"
           placeholder="CONFIRM PASSWORD"
           autoComplete="new-password"
+          tabIndex={
+            !isRegistering ? -1 : 0
+          } /** removes it from tab cycle when hidden */
           value={confirmPassword}
           onChange={(e) => {
             setConfirmPassword(e.target.value);
