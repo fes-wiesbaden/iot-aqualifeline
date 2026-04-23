@@ -6,12 +6,12 @@ import Footer from "./Footer";
 import Legal from "./Legal";
 import Shop from "./Shop";
 import Login from "./Login";
+import LoadingScreen from "./LoadingScreen";
 
 function LoggedIn() {
   return (
     <>
       <SystemView />
-      <Footer />
     </>
   );
 }
@@ -66,7 +66,7 @@ function App() {
           <>
             <HomeButton />
             <LoggedIn />
-            <Footer/>
+            <Footer />
           </>
         }
       />
@@ -87,7 +87,7 @@ function App() {
           <>
             <HomeButton />
             <Shop />
-            <Footer/>
+            <Footer />
           </>
         }
       />

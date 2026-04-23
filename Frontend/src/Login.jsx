@@ -4,6 +4,7 @@ import "primeicons/primeicons.css";
 import { useState, useEffect, useRef } from "react";
 import { MockAuthService } from "./service/MockAuthService";
 import { Toast } from "primereact/toast";
+import LoadingScreen from "./LoadingScreen";
 
 function Login() {
   const navigate = useNavigate();
@@ -83,6 +84,15 @@ function Login() {
     }
   };
 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 300);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <LoadingScreen />;
+
   return (
     <div className="login">
       <Toast ref={toast} position="top-right" />
@@ -93,6 +103,7 @@ function Login() {
           className="default-input"
           placeholder="USERNAME"
           value={username}
+          autoComplete="off"
           onChange={(e) => setUsername(e.target.value)}
         />
       </div>
@@ -102,6 +113,7 @@ function Login() {
           className="default-input"
           placeholder="EMAIL"
           value={email}
+          autoComplete="off"
           type="email"
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -111,6 +123,8 @@ function Login() {
         <input
           className="default-input"
           placeholder="PASSWORD"
+          autoComplete="new-password"
+          type={isRegistering ? "text" : "password"}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
@@ -120,6 +134,7 @@ function Login() {
         <input
           className="default-input"
           placeholder="CONFIRM PASSWORD"
+          autoComplete="new-password"
           value={confirmPassword}
           onChange={(e) => {
             setConfirmPassword(e.target.value);
@@ -131,11 +146,14 @@ function Login() {
       </button>
       <span
         className="login-toggle"
-        onClick={() => setIsRegistering((prev) => !prev)}
+        onClick={() => {
+          setIsRegistering((prev) => !prev);
+          clearInputs();
+        }}
       >
         {isRegistering
-          ? "Already have an account? Sign in here"
-          : "No account yet? Create one here"}
+          ? "Already have an account?"
+          : "No account yet? Create one!"}
       </span>
     </div>
   );

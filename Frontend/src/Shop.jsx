@@ -7,6 +7,7 @@ import { classNames } from "primereact/utils";
 import { ProductService } from "./service/ProductService";
 import { InputText } from "primereact/inputtext";
 import ShoppingCart from "./ShoppingCart";
+import LoadingScreen from "./LoadingScreen";
 import "primeicons/primeicons.css";
 import { useState, useEffect } from "react";
 
@@ -42,7 +43,6 @@ function Shop() {
           alt={product.name}
         />
         <div className="prod-data-wrap">
-
           <div className="prod-info">
             <div className="prod-name">{product.name}</div>
             <Rating value={product.rating} readOnly cancel={false}></Rating>
@@ -67,7 +67,6 @@ function Shop() {
               disabled={product.inventoryStatus === "OUTOFSTOCK"}
             ></Button>
           </div>
-
         </div>
       </div>
     );
@@ -82,6 +81,15 @@ function Shop() {
 
     return <div className="products">{list}</div>;
   };
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 200);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <LoadingScreen />;
 
   return (
     <>
