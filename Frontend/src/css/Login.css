@@ -1,0 +1,69 @@
+:root {
+  --cerulean: hsla(194, 100%, 33%, 1);
+  --tropical-teal: hsla(183, 100%, 36%, 1);
+  --light-yellow: hsla(58, 89%, 93%, 1);
+  --soft-apricot: hsla(29, 97%, 86%, 1);
+  --vibrant-coral: hsla(4, 82%, 67%, 1);
+  --bright-coral: rgb(243, 82, 71);
+}
+
+* {
+  font-family: Helvetica, sans-serif;
+}
+
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-toggle {
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 0.5rem;
+  margin: 0.5rem;
+  color: var(--light-yellow);
+}
+
+.login-toggle:hover {
+  cursor: pointer;
+}
+
+.login-error {
+  font-size: 1.3rem;
+  color: var(--bright-coral);
+  background-color: var(--light-yellow);
+  padding: 0.75rem 2rem;
+  margin: 1rem 0.25rem;
+  border-radius: 0.5rem;
+  font-weight: bold;
+}
+
+.input-title {
+  font-size: 0.85rem;
+  font-weight: bold;
+  margin: 1rem 0 0 0;
+  align-self: flex-start;
+  color: var(--light-yellow);
+}
+
+.submit {
+  font-size: 1.25rem;
+  letter-spacing: 0.1rem;
+}
+
+.input-group {
+  overflow: hidden;
+  max-height: 6rem;
+  opacity: 1;
+  transition:
+    max-height 0.3s ease,
+    opacity 0.3s ease,
+    margin 0.3s ease;
+}
+
+.input-group.hidden {
+  max-height: 0;
+  opacity: 0;
+  margin: 0;
+}

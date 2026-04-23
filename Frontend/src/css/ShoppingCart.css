@@ -142,7 +142,12 @@
 
 .cart-prod-delete-button {
   background-color: var(--bright-coral);
+}
 
+.cart-checkout-button {
+  max-width: 10rem;
+  font-weight: bold;
+  float: right;
 }
 
 .prod-count .p-inputnumber-input {

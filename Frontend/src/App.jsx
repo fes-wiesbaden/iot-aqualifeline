@@ -5,6 +5,7 @@ import HomeButton from "./HomeButton";
 import Footer from "./Footer";
 import Legal from "./Legal";
 import Shop from "./Shop";
+import Login from "./Login";
 
 function LoggedIn() {
   return (
@@ -52,15 +53,8 @@ function App() {
         path="/login"
         element={
           <>
-            <div className="login">
-              <HomeButton />
-              <h1 id="logintitle">AquaLifeline</h1>
-              <input className="default-input" placeholder="USERNAME" />
-              <input className="default-input" placeholder="PASSWORD" />
-              <button className="submit" onClick={() => navigate("/loggedIn")}>
-                LOGIN
-              </button>
-            </div>
+            <HomeButton />
+            <Login />
             <Footer />
           </>
         }

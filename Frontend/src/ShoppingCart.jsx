@@ -113,6 +113,7 @@ function ShoppingCart() {
             ) /* toggle the cart visibility on ACTUAL current value*/
         }
       >
+        
         <i
           className={`${visibleCart ? "pi pi-times" : "pi pi-shopping-cart"}`}
         ></i>
@@ -124,6 +125,10 @@ function ShoppingCart() {
             YOUR SHOPPING CART ({shoppingCart.length})
           </span>
           {shoppingCart.map((product, index) => itemTemplate(product, index))}
+          <Button
+              className="cart-checkout-button"
+              onClick={() => alert("CHECKOUT")}
+            >Checkout</Button>
         </div>
       )}
     </div>
