@@ -195,7 +195,6 @@ void loop() {
       doc["Temperatur"] = tempC;
     }
     // Daten in das JSON-Dokument eintragen
-    // Du kannst hier leicht weitere Daten hinzufügen
     // Syntax = doc["status"] = "online";    
     doc["Wasserqualitaet"] = tdsRaw;
     doc["Wasserstand"] = waterLevelRaw;
