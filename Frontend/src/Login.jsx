@@ -28,17 +28,17 @@ function Login() {
   };
 
   async function login(username, password) {
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/auth/login`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ name: username, password: password }),
-      },
-    );
-    const result = await response.text();
-    return { success: response.ok, message: result, token: result };
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ name: username, password: password }),
+    });
+    const result = await response.json();
+    if (response.ok) {
+      localStorage.setItem("token", result.token);
+    }
+    return { success: response.ok, message: result, token: result.token };
   }
 
   async function register(username, password) {
@@ -76,7 +76,10 @@ function Login() {
         });
         return;
       }
-      const result = await register(username, password); /** declare promise to wait for response */
+      const result = await register(
+        username,
+        password,
+      ); /** declare promise to wait for response */
       if (result.success) {
         localStorage.setItem("token", result.token);
         clearInputs();
@@ -96,7 +99,10 @@ function Login() {
         });
       }
     } else {
-      const result = await login(username, password); /** declare promise to wait for response */
+      const result = await login(
+        username,
+        password,
+      ); /** declare promise to wait for response */
       if (result.success) {
         localStorage.setItem("token", result.token);
         clearInputs();

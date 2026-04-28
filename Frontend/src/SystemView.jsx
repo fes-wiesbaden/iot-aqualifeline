@@ -82,6 +82,29 @@ function addSystem(hideElement, name, chartsArray, setCharts, lastId) {
   hideElement();
 }
 
+async function addAquarium(serialnum) {
+  console.log("START FETCH AQUARIUM SERIAL NUM");
+  const token = localStorage.getItem("token");
+  console.log("Token:", token);
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/aquarien/serialNumber/${serialnum}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+    },
+  );
+
+  const result = await response.text();
+  console.log("RESULT:");
+  console.log(result);
+
+  return { success: response.ok, message: result };
+}
+
 function SystemView() {
   const [charts, setCharts] = useState([]);
   const [visible, setVisible] = useState(false);
@@ -125,7 +148,11 @@ function SystemView() {
                   icon="pi pi-refresh"
                   className="refresh-chart-data"
                   tooltip="fetch newest data for this device"
-                  tooltipOptions={{position: 'top', showDelay: 500, hideDelay: 100}}
+                  tooltipOptions={{
+                    position: "top",
+                    showDelay: 500,
+                    hideDelay: 100,
+                  }}
                 ></Button>
               </div>
             </div>
@@ -168,15 +195,21 @@ function SystemView() {
               <div className="btn-wrapper">
                 <Button
                   label="Add System"
-                  onClick={(e) =>
-                    addSystem(
+                  onClick={(e) => {
+                    const result = addSystem(
                       hide,
                       serialId,
                       charts,
                       setCharts,
                       charts.length > 0 ? charts.at(-1).id : 0,
-                    )
-                  }
+                    );
+                  }}
+                  text
+                  className="btn"
+                ></Button>
+                <Button
+                  label="Test Add"
+                  onClick={(e) => addAquarium(serialId)}
                   text
                   className="btn"
                 ></Button>

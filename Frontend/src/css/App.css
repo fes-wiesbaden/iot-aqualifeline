@@ -119,4 +119,69 @@ input::placeholder {
 }
 
 
+@media (max-width: 768px) {
+  #headtitle {
+    font-size: 4rem;
+    letter-spacing: 0.5rem;
+  }
+
+  #headsubtitle {
+    font-size: 1.25rem;
+    letter-spacing: 0.2rem;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .loginnav {
+    font-size: 1.75rem;
+    padding: 0.75rem 3rem;
+  }
+
+  .loginnav:hover {
+    font-size: 1.75rem;
+    padding: 0.75rem 4rem;
+  }
+
+  .greeting {
+    margin-top: 5rem;
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #headtitle {
+    font-size: 2.5rem;
+    letter-spacing: 0.3rem;
+  }
+
+  #headsubtitle {
+    font-size: 1rem;
+    letter-spacing: 0.1rem;
+  }
+
+  .loginnav {
+    font-size: 1.25rem;
+    padding: 0.75rem 2rem;
+    width: 80%;
+    text-align: center;
+  }
+
+  .loginnav:hover {
+    font-size: 1.25rem;
+    padding: 0.75rem 2rem;
+    transform: scale(1.05);
+  }
+
+  .greeting {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    padding: 0 1rem;
+  }
+
+  #landingpage-pic {
+    object-fit: cover;
+    height: 100%;
+  }
+}
+
 
