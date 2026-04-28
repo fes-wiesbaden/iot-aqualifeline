@@ -206,15 +206,15 @@ JSON documnet erstllen und senden
     
     //Sensoranschluss prüfen ist (-127 = Fehler)
     if (tempC == DEVICE_DISCONNECTED_C) {
-      doc["Temperatur"] = "Fehler";
+      doc["Temperatur_1"] = "Fehler";
     } else {
-      doc["Temperatur"] = tempC;
+      doc["Temperatur_1"] = tempC;
     }
     
     // Syntax = doc["status"] = "online";    
-    doc["Wasserqualitaet"] = tdsRaw;
-    doc["Wasserstand"] = waterLevelRaw;
-    doc["PH-Wert"] = round(phValue * 100) / 100.0;
+    doc["Wasserqualitaet_1"] = tdsRaw;
+    doc["Wasserstand_1"] = waterLevelRaw;
+    doc["PH-Wertsensor_1"] = round(phValue * 100) / 100.0;
 
     // JSON umwandlung in String
     String jsonOutput;
