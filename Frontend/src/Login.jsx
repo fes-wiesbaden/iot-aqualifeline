@@ -76,7 +76,7 @@ function Login() {
         });
         return;
       }
-      const result = await register(username, password);
+      const result = await register(username, password); /** declare promise to wait for response */
       if (result.success) {
         localStorage.setItem("token", result.token);
         clearInputs();
@@ -96,7 +96,7 @@ function Login() {
         });
       }
     } else {
-      const result = await login(username, password);
+      const result = await login(username, password); /** declare promise to wait for response */
       if (result.success) {
         localStorage.setItem("token", result.token);
         clearInputs();

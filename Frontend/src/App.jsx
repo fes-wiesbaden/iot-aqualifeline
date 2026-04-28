@@ -41,10 +41,6 @@ function App() {
               <button className="loginnav" onClick={() => navigate("/login")}>
                 GET STARTED
               </button>
-
-              <button className="loginnav" onClick={() => navigate("/shop")}>
-                SHOP
-              </button>
             </div>
             <Footer />
           </>

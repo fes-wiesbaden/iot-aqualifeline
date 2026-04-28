@@ -1,26 +1,76 @@
-.home {
-  display: inline-flex;
+.homeWrapper {
   position: fixed;
   top: 1rem;
   left: 1rem;
   z-index: 800;
-
   background-color: var(--vibrant-coral);
-  border: none;
-  border-radius: 25%;
-  color: white;
-  padding: 0.5rem;
-  font-size: 2rem;
-  transition: 0.2s ease;
+  border-radius: 1.5rem;
   box-shadow: 0rem 0.3rem 0.5rem rgb(0, 0, 0, 0.3);
+  overflow: hidden;
+  transition: 0.3s ease;
+}
+
+.home {
+  display: flex;
+  min-width: 5rem;
+  height: 5rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  background-color: transparent;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  width: 100%;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
 .home:hover {
+  background-color: var(--bright-coral);
+}
+
+.subButtons {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.homeWrapper.expanded .subButtons {
+  max-height: 10rem;
+}
+
+.subHomeButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  justify-content: center;
+  text-align: center;
+  background-color: var(--tropical-teal);
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
   transition: 0.2s ease;
+}
+
+.subHomeButton:hover {
+  background-color: var(--cerulean);
+}
+
+.close {
+  background-color: var(--vibrant-coral);
+}
+
+.close:hover {
   background-color: var(--bright-coral);
 }
 
 img {
-  max-width: 4rem;
-  max-height: auto;
+  max-width: 3rem;
 }
