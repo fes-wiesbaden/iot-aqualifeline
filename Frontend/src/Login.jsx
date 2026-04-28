@@ -2,7 +2,6 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import "./css/Login.css";
 import "primeicons/primeicons.css";
 import { useState, useEffect, useRef } from "react";
-import { MockAuthService } from "./service/MockAuthService";
 import { Toast } from "primereact/toast";
 import LoadingScreen from "./LoadingScreen";
 
@@ -28,7 +27,36 @@ function Login() {
     setConfirmPassword("");
   };
 
-  const handleSubmit = () => {
+  async function login(username, password) {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/auth/login`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ name: username, password: password }),
+      },
+    );
+    const result = await response.text();
+    return { success: response.ok, message: result, token: result };
+  }
+
+  async function register(username, password) {
+    console.log("Registering with:", username, password);
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/auth/register`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ name: username, password: password }),
+      },
+    );
+    const result = await response.text();
+    return { success: response.ok, message: result };
+  }
+
+  const handleSubmit = async () => {
     if (isRegistering) {
       if (!validateEmail(email)) {
         toast.current?.show({
@@ -48,7 +76,7 @@ function Login() {
         });
         return;
       }
-      const result = MockAuthService.register(username, password, email);
+      const result = await register(username, password);
       if (result.success) {
         localStorage.setItem("token", result.token);
         clearInputs();
@@ -60,7 +88,6 @@ function Login() {
         });
         setIsRegistering(false);
       } else {
-
         toast.current?.show({
           severity: "error",
           summary: "Error",
@@ -69,7 +96,7 @@ function Login() {
         });
       }
     } else {
-      const result = MockAuthService.login(username, password);
+      const result = await login(username, password);
       if (result.success) {
         localStorage.setItem("token", result.token);
         clearInputs();
