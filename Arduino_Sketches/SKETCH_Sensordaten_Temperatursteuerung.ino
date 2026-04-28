@@ -4,9 +4,9 @@
 #include <DallasTemperature.h>
 #include <OneWire.h>
 
-// ==========================================
-//  KONFIGURATION
-// ==========================================
+/*
+Konfiguration
+*/
 
 const char* ssid = "FES-SuS";
 const char* password = "SuS-WLAN!Key24";
@@ -28,12 +28,12 @@ const char* subscribe_topic = "sensor/aquarium/command";
 // Instanzen für OneWire und DallasTemperature erstellen
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
-// 'const' entfernt, damit wir das Intervall per MQTT (JSON) ändern können
+
 unsigned long publishInterval = 5000; 
 
-// ==========================================
-// 🛠 OBJEKTE & VARIABLEN
-// ==========================================
+/*
+Objekte und Variablen
+*/
 
 const int red = 10;
 const float SCHWELLENWERT = 23.0;
@@ -48,10 +48,10 @@ float phOffset = -2.50;          //Differenz des PH-Werts
 float phStep = 3.5;             // Steigung 
 #define SAMPLES 10              // Anzahl der Messungen für Durchschnitt
 
-// ==========================================
-// CALLBACK: EINGEHENDE MQTT-NACHRICHTEN
-// ==========================================
-// Diese Funktion wird automatisch aufgerufen, wenn der Broker uns etwas sendet
+/*
+Callback Eingehede MQTT-Nachrichten
+*/
+
 void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("\n Nachricht empfangen auf Topic: ");
   Serial.println(topic);
@@ -64,7 +64,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Inhalt: ");
   Serial.println(message);
 
-  // JSON Dokument erstellen (ArduinoJson v7 Syntax)
+  // JSON Dokument erstellen 
   JsonDocument doc;
   
   // JSON aus dem String auslesen
@@ -76,9 +76,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
     return;
   }
 
-  // --- Beispiel: Auf JSON-Schlüssel reagieren ---
-  // Wir prüfen, ob der Broker uns ein neues "intervall" geschickt hat
-  // Beispiel-Payload vom Broker: {"intervall": 10000}
+  
   if (doc.containsKey("intervall")) {
     publishInterval = doc["intervall"];
     Serial.print(" Neues Messintervall gesetzt auf: ");
@@ -86,10 +84,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println(" ms");
   }
 }
-
-// ==========================================
-//  FUNKTIONEN FÜR WLAN & MQTT
-// ==========================================
+/*
+Funktionen für WLAN und MQTT 
+*/
 
 void setup_wifi() {
   delay(10);
@@ -118,7 +115,6 @@ void reconnect() {
     if (client.connect(clientId.c_str(), mqtt_user, mqtt_pass)) {
       Serial.println("  verbunden!");
       
-      // NEU: Beim erfolgreichen Verbinden auf das Command-Topic abonnieren (Subscribe)
       client.subscribe(subscribe_topic);
       Serial.print("Abonniert auf Topic: ");
       Serial.println(subscribe_topic);
@@ -130,10 +126,9 @@ void reconnect() {
     }
   }
 }
-
-// ==========================================
-// SETUP & LOOP
-// ==========================================
+/*
+Setup und Loop
+*/
 
 void setup() {
   Serial.begin(115200);
@@ -148,12 +143,12 @@ void setup() {
 Serial.println(sensors.getDeviceCount());
   client.setServer(mqtt_server, mqtt_port);
   
-  // NEU: Dem MQTT-Client sagen, welche Funktion bei neuen Nachrichten aufgerufen werden soll
   client.setCallback(callback);
   client.setBufferSize(512);
 }
 
 void loop() {
+  //WLAN immer wieder reconnecten
   if (WiFi.status() != WL_CONNECTED) {
     setup_wifi();
   }
@@ -168,7 +163,7 @@ void loop() {
   if (currentMillis - lastMsgTime >= publishInterval) {
     lastMsgTime = currentMillis;
 
-        // --- pH MESSUNG MIT MITTELWERTBILDUNG ---
+       // ph Messungen
     long sumPH = 0;
     for (int i = 0; i < SAMPLES; i++) {
       sumPH += analogRead(PH);
@@ -181,7 +176,6 @@ void loop() {
 
     // Umrechnung Spannung -> pH-Wert
     // Die Formel lautet oft: pH = 7 + (V_neutral - V_mess) * Multiplikator
-    // Da jedes Modul streut, ist dies ein Standard-Startwert:
     float phValue = 3.5 * voltagePH + phOffset;
 
     int tdsRaw = analogRead(TDS_PIN);
@@ -190,9 +184,9 @@ void loop() {
 								 
 								   
 											  
-		 // --- TEMPERATUR MESSUNG ---
+		 // Temperaturmessung
      sensors.requestTemperatures(); // Befehl zum Messen senden
-    float tempC = sensors.getTempCByIndex(0); // Temperatur in Celsius abrufen
+    float tempC = sensors.getTempCByIndex(0); // Temperatur in Celsius 
   
 	// --- LICHT-STEUERUNG (LOGIK) ---
 	if (tempC != DEVICE_DISCONNECTED_C) { // Nur schalten, wenn Sensor okay ist
@@ -204,10 +198,10 @@ void loop() {
 	   }
      }
       
-      
-    // ==========================================
-    //  JSON ERSTELLEN UND SENDEN
-    // ==========================================
+/*
+JSON documnet erstllen und senden
+*/
+
     JsonDocument doc;
     
     //Sensoranschluss prüfen ist (-127 = Fehler)
@@ -216,7 +210,7 @@ void loop() {
     } else {
       doc["Temperatur"] = tempC;
     }
-    // Daten in das JSON-Dokument eintragen
+    
     // Syntax = doc["status"] = "online";    
     doc["Wasserqualitaet"] = tdsRaw;
     doc["Wasserstand"] = waterLevelRaw;
