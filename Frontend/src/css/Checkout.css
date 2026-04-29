@@ -67,7 +67,7 @@
   box-shadow: 0rem 0.2rem 0.6rem rgb(0, 0, 0, 0.3);
 }
 
-input::placeholder {
+.checkoutContainer input::placeholder {
     color: rgb(137, 137, 137);
 }
 
