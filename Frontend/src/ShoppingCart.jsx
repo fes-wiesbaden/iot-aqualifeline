@@ -5,8 +5,8 @@ import { InputNumber } from "primereact/inputnumber";
 import "./css/ShoppingCart.css";
 import "primeicons/primeicons.css";
 
-function ShoppingCart() {
-  const [shoppingCart, setShoppingCart] = useState([]);
+function ShoppingCart({ shoppingCart, setShoppingCart  }) {
+
   const updateCount = (id, method) => {
     setShoppingCart((prev) =>
       prev.map((product) => {
@@ -24,42 +24,16 @@ function ShoppingCart() {
     products.forEach((product) => {
       sum = sum + product.price * product.count;
     });
-    return sum;
+    return Math.round(sum * 100) / 100;
   };
 
   const [visibleCart, setVisibleCart] = useState(false);
   const [mounted, setMounted] = useState(true);
   /** delay to let css settle animations first */
 
-  useEffect(() => {
-    const dummyShoppingCartData = [
-      {
-        id: "1000",
-        name: "Bamboo Watch",
-        image: "bamboo-watch.jpg",
-        price: 65.99,
-        rating: 4,
-        count: 2,
-      },
-      {
-        id: "1001",
-        name: "Black Watch",
-        image: "black-watch.jpg",
-        price: 72.99,
-        rating: 4,
-        count: 1,
-      },
-      {
-        id: "1002",
-        name: "Blue Band",
-        image: "blue-band.jpg",
-        price: 79.99,
-        rating: 3,
-        count: 20,
-      },
-    ];
-    setShoppingCart(dummyShoppingCartData);
-  }, []);
+  const deleteFromCart = (id) => {
+    setShoppingCart((prev) => prev.filter((p) => p.id !== id));
+  };
 
   const itemTemplate = (product, index) => {
     return (
@@ -102,6 +76,7 @@ function ShoppingCart() {
             <Button
               icon="pi pi-trash"
               className="cart-prod-delete-button"
+              onClick={() => deleteFromCart(product.id)}
             ></Button>
           </div>
         </div>
@@ -138,7 +113,7 @@ function ShoppingCart() {
             </span>
             <Button
               className="cart-checkout-button"
-              onClick={() => alert("CHECKOUT")}
+              onClick={() => navigate("/checkout")}
             >
               Checkout
             </Button>

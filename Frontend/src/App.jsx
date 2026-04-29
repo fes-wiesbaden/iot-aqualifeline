@@ -6,7 +6,9 @@ import Footer from "./Footer";
 import Legal from "./Legal";
 import Shop from "./Shop";
 import Login from "./Login";
+import Checkout from "./Checkout";
 import LoadingScreen from "./LoadingScreen";
+import { useState } from "react";
 
 function LoggedIn() {
   return (
@@ -16,10 +18,9 @@ function LoggedIn() {
   );
 }
 
-
 function App() {
   const navigate = useNavigate();
-
+  const [shoppingCart, setShoppingCart] = useState([]);
 
   return (
     <Routes>
@@ -84,7 +85,18 @@ function App() {
         element={
           <>
             <HomeButton />
-            <Shop />
+            <Shop shoppingCart={shoppingCart} setShoppingCart={setShoppingCart}/>
+            <Footer />
+          </>
+        }
+      />
+
+      <Route
+        path="/checkout"
+        element={
+          <>
+            <HomeButton />
+            <Checkout shoppingCart={shoppingCart} setShoppingCart={setShoppingCart}/>
             <Footer />
           </>
         }

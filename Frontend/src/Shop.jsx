@@ -11,7 +11,7 @@ import LoadingScreen from "./LoadingScreen";
 import "primeicons/primeicons.css";
 import { useState, useEffect } from "react";
 
-function Shop() {
+function Shop({ shoppingCart, setShoppingCart }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -65,6 +65,7 @@ function Shop() {
               icon="pi pi-shopping-cart"
               className="prod-shop-button"
               disabled={product.inventoryStatus === "OUTOFSTOCK"}
+              onClick={() => addToCart(product)}
             ></Button>
           </div>
         </div>
@@ -89,13 +90,29 @@ function Shop() {
     return () => clearTimeout(timer);
   }, []);
 
+  const addToCart = (product) => {
+    setShoppingCart((prev) => {
+      const existing = prev.find((p) => p.id === product.id);
+      if (existing) {
+        return prev.map((p) =>
+          p.id === product.id ? { ...p, count: p.count + 1 } : p,
+        );
+      }
+      return [...prev, { ...product, count: 1 }];
+    });
+  };
+
+
   if (loading) return <LoadingScreen />;
 
   return (
     <>
       <div id="container">
         <h1>SHOP</h1>
-        <ShoppingCart />
+        <ShoppingCart
+          shoppingCart={shoppingCart}
+          setShoppingCart={setShoppingCart}
+        />
         <DataView value={products} listTemplate={listTemplate} />
       </div>
     </>
