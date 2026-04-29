@@ -119,6 +119,7 @@ function Checkout({ shoppingCart, setShoppingCart }) {
               </div>
               <Button
                 icon="pi pi-shopping-cart"
+                label="Place Order"
                 className="order-button"
                 disabled
               ></Button>
