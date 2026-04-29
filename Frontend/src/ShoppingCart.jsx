@@ -19,6 +19,14 @@ function ShoppingCart() {
     );
   };
 
+  const calcSummary = (products) => {
+    let sum = 0;
+    products.forEach((product) => {
+      sum = sum + product.price * product.count;
+    });
+    return sum;
+  };
+
   const [visibleCart, setVisibleCart] = useState(false);
   const [mounted, setMounted] = useState(true);
   /** delay to let css settle animations first */
@@ -113,7 +121,6 @@ function ShoppingCart() {
             ) /* toggle the cart visibility on ACTUAL current value*/
         }
       >
-        
         <i
           className={`${visibleCart ? "pi pi-times" : "pi pi-shopping-cart"}`}
         ></i>
@@ -125,10 +132,17 @@ function ShoppingCart() {
             YOUR SHOPPING CART ({shoppingCart.length})
           </span>
           {shoppingCart.map((product, index) => itemTemplate(product, index))}
-          <Button
+          <div className="cart-footer">
+            <span className="cart-summary">
+              SUMMARY: {calcSummary(shoppingCart)} €
+            </span>
+            <Button
               className="cart-checkout-button"
               onClick={() => alert("CHECKOUT")}
-            >Checkout</Button>
+            >
+              Checkout
+            </Button>
+          </div>
         </div>
       )}
     </div>

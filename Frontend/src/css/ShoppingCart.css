@@ -9,6 +9,17 @@
   margin-top: 1rem;
 }
 
+.cart-summary {
+  display: block;
+  color: var(--cerulean);
+  font-size: 1.5rem;
+  letter-spacing: normal;
+  text-align: left;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+
 .shopping-cart-btn {
   display: inline-flex;
   position: fixed;
