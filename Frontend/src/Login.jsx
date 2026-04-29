@@ -184,6 +184,9 @@ function Login() {
       <button className="submit" onClick={handleSubmit}>
         {isRegistering ? "REGISTER" : "LOGIN"}
       </button>
+      <button className="submit" onClick={() => navigate("/loggedIn")}>
+          TEST LOGIN
+      </button>
       <span
         className="login-toggle"
         onClick={() => {
