@@ -39,7 +39,7 @@ function Shop({ shoppingCart, setShoppingCart }) {
       <div className="product-wrap" key={product.id}>
         <img
           className="prod-img"
-          src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`}
+          src={`./public/${product.image}`}
           alt={product.name}
         />
         <div className="prod-data-wrap">

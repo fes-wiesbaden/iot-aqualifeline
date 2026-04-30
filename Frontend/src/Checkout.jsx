@@ -36,7 +36,7 @@ function Checkout({ shoppingCart, setShoppingCart }) {
       <div className="cart-wrap" key={product.id}>
         <img
           className="cart-prod-img"
-          src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`}
+          src={`./public/${product.image}`}
           alt={product.name}
         />
         <div className="cart-prod-data-wrap">
@@ -82,40 +82,40 @@ function Checkout({ shoppingCart, setShoppingCart }) {
   return (
     <>
       <div id="container">
-        <h1>CHECKOUT</h1>
+        <h1>KASSE</h1>
         {console.log(shoppingCart)}
         <div className="checkoutContainer">
           <div className="checkoutInnerContainer">
             <div className="shipping">
-              <h1>Credentials</h1>
+              <h1>Kontaktdaten:</h1>
               <div className="credentials">
-                <h2>First Name:</h2>
+                <h2>Vorname:</h2>
                 <input type="text" placeholder="First Name" />
-                <h2>Last Name:</h2>
+                <h2>Nachname:</h2>
                 <input type="text" placeholder="Last Name" />
                 <h2>E-Mail:</h2>
                 <input type="text" placeholder="E-Mail" />
               </div>
-              <h1>Delivery Details</h1>
+              <h1>Bestelldetails:</h1>
               <div className="deliveryDetails">
-                <h2>City:</h2>
+                <h2>Stadt:</h2>
                 <input type="text" placeholder="City" />
-                <h2>Zip Code:</h2>
+                <h2>PLZ:</h2>
                 <input type="text" placeholder="Zip Code" />
-                <h2>Street:</h2>
+                <h2>Straße:</h2>
                 <input type="text" placeholder="Street" />
-                <h2>House Number:</h2>
+                <h2>Hausnummer:</h2>
                 <input type="text" placeholder="House Number" />
               </div>
             </div>
 
             <div className="summary">
               <div className="summaryText">
-                <h1>Order Summary:</h1>
+                <h1>Zusammenfassung:</h1>
                 {shoppingCart.map((product, index) =>
                   itemTemplate(product, index),
                 )}
-                <h2 className="total">TOTAL: {totalCost} €</h2>
+                <h2 className="total">GESAMT: {totalCost} €</h2>
               </div>
               <Button
                 icon="pi pi-shopping-cart"

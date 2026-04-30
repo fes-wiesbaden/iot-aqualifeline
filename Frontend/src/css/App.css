@@ -21,8 +21,9 @@ p, h1, h2, h3 {
 
 #landingpage-pic {
   position: absolute;
-  width: 100%;
-  min-width: 100%;
+  min-width: 100vw;
+  height: 100%;
+  object-fit: cover;
   z-index: 0;
 }
 

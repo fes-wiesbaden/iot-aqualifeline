@@ -9,81 +9,69 @@ import "primereact/resources/themes/lara-light-cyan/theme.css";
 import "primereact/resources/primereact.min.css";
 import { useState } from "react";
 
-function addSystem(hideElement, name, chartsArray, setCharts, lastId) {
-  const data1 = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-    datasets: [
-      {
-        label: "Water Quality",
-        data: [54, 76, 63, 230, 178, 102],
-        fill: false,
-        tension: 0.4,
-      },
-      {
-        label: "Temperature",
-        data: [19, 21, 23, 23, 22, 18],
-        fill: false,
-        tension: 0.4,
-      },
-      {
-        label: "pH",
-        data: [6.7, 3.0, 12.0, 4.5, 5.1, 1.2],
-        fill: false,
-        tension: 0.4,
-      },
-      {
-        label: "Water Level",
-        data: [20, 15, 10, 5, 85, 74],
-        fill: false,
-        tension: 0.4,
-      },
-    ],
-  };
-
-  const options2 = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        labels: {
-          color: "#333",
-        },
-      },
-      title: {
-        display: true,
-        text: name,
-        font: {
-          size: 30,
-        },
-        padding: {
-          bottom: 10,
-        },
+const options2 = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      labels: {
+        color: "#333",
       },
     },
-    scales: {
-      x: {
-        ticks: {
-          color: "#333",
-        },
+    title: {
+      display: true,
+      text: name,
+      font: {
+        size: 30,
       },
-      y: {
-        ticks: {
-          color: "#333",
-        },
+      padding: {
+        bottom: 10,
       },
     },
-  };
+  },
+  scales: {
+    x: {
+      ticks: {
+        color: "#333",
+      },
+    },
+    y: {
+      ticks: {
+        color: "#333",
+      },
+    },
+  },
+};
 
-  let newId = lastId + 1;
-  setCharts([
-    ...chartsArray,
-    { id: newId, data: data1, options: options2, dates: null },
-  ]);
+const addSystem = (
+  hideElement,
+  serialNumber,
+  aquariumData,
+  chartsArray,
+  setCharts,
+  lastId,
+) => {
+  const newChart = {
+    id: lastId + 1,
+    serialNumber: serialNumber,
+    dates: null,
+    data: {
+      labels: [],
+      datasets: [
+        { label: "Wasserqualität", data: [], fill: false, tension: 0.4 },
+        { label: "Temperatur", data: [], fill: false, tension: 0.4 },
+        { label: "pH-Wert", data: [], fill: false, tension: 0.4 },
+        { label: "Wasserstand", data: [], fill: false, tension: 0.4 },
+      ],
+    },
+    options: options2,
+  };
+  setCharts([...chartsArray, newChart]);
   hideElement();
-}
+};
 
 async function addAquarium(serialnum) {
-  console.log("START FETCH AQUARIUM SERIAL NUM");
+  console.log("START FETCH AQUARIUM BY SERIAL NUM");
   const token = localStorage.getItem("token");
   console.log("Token:", token);
   const response = await fetch(
@@ -102,21 +90,71 @@ async function addAquarium(serialnum) {
   console.log("RESULT:");
   console.log(result);
 
+  /*addSystem(
+    hide,
+    serialId,
+    charts,
+    setCharts,
+    charts.length > 0 ? charts.at(-1).id : 0,
+  );
+  */
+
   return { success: response.ok, message: result };
 }
+
+const fetchChartData = async (chart) => {
+  if (!chart.dates || !chart.dates[0] || !chart.dates[1]) {
+    console.warn("No date range selected");
+    return;
+  }
+  const token = localStorage.getItem("token");
+  const from = chart.dates[0].toISOString();
+  const to = chart.dates[1].toISOString();
+
+  const response = await fetch(
+    `${import.meta.env.VITE_API_URL}/measurements/${chart.serialNumber}?from=${from}&to=${to}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
+
+  const measurements = await response.json();
+
+  setCharts((prev) =>
+    prev.map((c) => {
+      if (c.id !== chart.id) return c;
+      return { // find chart
+        ...c,
+        data: {
+          labels: measurements.map((measurement) => measurement.timestamp), 
+          datasets: c.data.datasets.map((dataset) => ({
+            ...dataset,
+            data: measurements
+              .filter(
+                (measurement) =>
+                  measurement.sensorType ===
+                  dataset.label.toUpperCase().replace(" ", "_"), // ! dependent on what backend named it
+              )
+              .map((measurement) => measurement.value), // sets data dependent on sensor
+          })),
+        },
+      };
+    }),
+  );
+};
 
 function SystemView() {
   const [charts, setCharts] = useState([]);
   const [visible, setVisible] = useState(false);
   const [serialId, setSerialId] = useState("");
-  const [dates, setDates] = useState(null);
+  const [dates, setDates] = useState();
 
   return (
     <>
       <div id="container" className={visible ? "blurred" : ""}>
-        <h1>YOUR SYSTEMS</h1>
+        <h1>DEINE SYSTEME</h1>
         {charts.length == 0 && (
-          <h2 className="nosystems-warning">No systems added yet</h2>
+          <h2 className="nosystems-warning">Noch keine Systeme hinzugefügt</h2>
         )}
         <div className="charts-container">
           {charts.map((chart) => (
@@ -132,16 +170,23 @@ function SystemView() {
               </div>
               <div className="chart-extras">
                 <div className="calendar-wrapper">
-                  <h2 className="calendar-title">Timespan:</h2>
+                  <h2 className="calendar-title">Zeitspanne:</h2>
                   <Calendar
-                    value={dates}
-                    onChange={(e) => setDates(e.value)}
+                    value={chart.dates}
+                    onChange={(e) => {
+                      setCharts((prev) =>
+                        prev.map((calendar) => // search for corresponding chart for calendar
+                          calendar.id === chart.id
+                            ? { ...calendar, dates: e.value }
+                            : calendar,
+                        ),
+                      );
+                    }}
                     selectionMode="range"
                     readOnlyInput
                     hideOnRangeSelection
                     showTime
                     hourFormat="24"
-                    dateFormat="dd-mm-yy /"
                   />
                 </div>
                 <Button
@@ -153,6 +198,7 @@ function SystemView() {
                     showDelay: 500,
                     hideDelay: 100,
                   }}
+                  onClick={() => fetchChartData(chart)}
                 ></Button>
               </div>
             </div>
@@ -184,7 +230,7 @@ function SystemView() {
           content={({ hide }) => (
             <div className="dialog-wrapper">
               <div className="addchart-input">
-                <label id="input-title">SERIAL ID:</label>
+                <label id="input-title">SERIENNUMMER:</label>
                 <InputText
                   id="serial-id"
                   className="default-input"
@@ -194,11 +240,12 @@ function SystemView() {
               </div>
               <div className="btn-wrapper">
                 <Button
-                  label="Add System"
+                  label="Hinzufügen"
                   onClick={(e) => {
                     const result = addSystem(
                       hide,
                       serialId,
+                      null,
                       charts,
                       setCharts,
                       charts.length > 0 ? charts.at(-1).id : 0,
@@ -214,7 +261,7 @@ function SystemView() {
                   className="btn"
                 ></Button>
                 <Button
-                  label="Cancel"
+                  label="Abbrechen"
                   onClick={(e) => hide(e)}
                   text
                   className="btn"

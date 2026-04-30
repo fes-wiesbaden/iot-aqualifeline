@@ -130,12 +130,12 @@ function Login() {
   return (
     <div className="login">
       <Toast ref={toast} position="top-right" />
-      <h1 id="login-title">{isRegistering ? "CREATE ACCOUNT" : "SIGN IN"}</h1>
+      <h1 id="login-title">{isRegistering ? "ACCOUNT ERSTELLEN" : "EINLOGGEN"}</h1>
       <div className={`input-group`}>
-        <h2 className="input-title">Username:</h2>
+        <h2 className="input-title">Benutzername:</h2>
         <input
           className="default-input"
-          placeholder="USERNAME"
+          placeholder="BENUTZERNAME"
           value={username}
           autoComplete="off"
           onChange={(e) => setUsername(e.target.value)}
@@ -145,7 +145,7 @@ function Login() {
         <h2 className="input-title">E-Mail:</h2>
         <input
           className="default-input"
-          placeholder="EMAIL"
+          placeholder="E-MAIL"
           value={email}
           autoComplete="off"
           tabIndex={
@@ -156,10 +156,10 @@ function Login() {
         />
       </div>
       <div className={`input-group`}>
-        <h2 className="input-title">Password:</h2>
+        <h2 className="input-title">Passwort:</h2>
         <input
           className="default-input"
-          placeholder="PASSWORD"
+          placeholder="PASSWORT"
           autoComplete="new-password"
           type={isRegistering ? "text" : "password"}
           value={password}
@@ -167,10 +167,10 @@ function Login() {
         />
       </div>
       <div className={`input-group ${!isRegistering ? "hidden" : ""}`}>
-        <h2 className="input-title">Confirm Password:</h2>
+        <h2 className="input-title">Passwort bestätigen:</h2>
         <input
           className="default-input"
-          placeholder="CONFIRM PASSWORD"
+          placeholder="PASSWORT BESTÄTIGEN"
           autoComplete="new-password"
           tabIndex={
             !isRegistering ? -1 : 0
@@ -182,7 +182,10 @@ function Login() {
         />
       </div>
       <button className="submit" onClick={handleSubmit}>
-        {isRegistering ? "REGISTER" : "LOGIN"}
+        {isRegistering ? "REGISTRIEREN" : "EINLOGGEN"}
+      </button>
+      <button className="submit" onClick={() => navigate("/loggedIn")}>
+          TEST LOGIN
       </button>
       <span
         className="login-toggle"
@@ -192,8 +195,8 @@ function Login() {
         }}
       >
         {isRegistering
-          ? "Already have an account?"
-          : "No account yet? Create one!"}
+          ? "Haben Sie schon einen Account?"
+          : "Noch keinen Account? Hier erstellen!"}
       </span>
     </div>
   );

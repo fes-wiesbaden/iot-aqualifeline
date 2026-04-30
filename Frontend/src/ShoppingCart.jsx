@@ -40,7 +40,7 @@ function ShoppingCart({ shoppingCart, setShoppingCart  }) {
       <div className="cart-wrap" key={product.id}>
         <img
           className="cart-prod-img"
-          src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`}
+          src={`./public/${product.image}`}
           alt={product.name}
         />
         <div className="cart-prod-data-wrap">
@@ -104,18 +104,18 @@ function ShoppingCart({ shoppingCart, setShoppingCart  }) {
       {mounted && (
         <div className={`cart-products ${visibleCart ? "active" : ""}`}>
           <span className="cart-headline">
-            YOUR SHOPPING CART ({shoppingCart.length})
+            DEIN EINKAUFSWAGEN ({shoppingCart.length})
           </span>
           {shoppingCart.map((product, index) => itemTemplate(product, index))}
           <div className="cart-footer">
             <span className="cart-summary">
-              SUMMARY: {calcSummary(shoppingCart)} €
+              GESAMT: {calcSummary(shoppingCart)} €
             </span>
             <Button
               className="cart-checkout-button"
               onClick={() => navigate("/checkout")}
             >
-              Checkout
+              Zur Kasse
             </Button>
           </div>
         </div>
