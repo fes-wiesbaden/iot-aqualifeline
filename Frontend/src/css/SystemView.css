@@ -221,3 +221,73 @@ h1 {
 .p-tooltip.p-tooltip-active {
   transform: translateY(0);
 }
+
+@media (max-width: 480px) {
+
+  h1 {
+    font-size: 2rem;
+    padding: 1.5rem 0.5rem;
+    letter-spacing: 0.25rem;
+  }
+
+  .chart-group {
+    width: 85vw;
+    min-height: 35vh;
+    padding: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .chart-extras {
+    width: 85vw;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .calendar-wrapper {
+    margin: 0;
+    width: 100%;
+  }
+
+  .calendar-wrapper .p-calendar {
+    width: 100%;
+  }
+
+  .calendar-wrapper .p-calendar .p-inputtext {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .refresh-chart-data {
+    margin: 0;
+    width: 2.8rem;
+    height: 2.8rem;
+    align-self: center;
+  }
+
+  .dialog-wrapper {
+    width: 85vw;
+    padding: 1.5rem;
+  }
+
+  #input-title {
+    font-size: 1.4rem;
+    letter-spacing: 0.15rem;
+  }
+
+  .btn {
+    font-size: 1rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+  .add-chart {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .nosystems-warning {
+    margin: 4rem 1rem;
+    font-size: 1rem;
+    letter-spacing: 0.1rem;
+  }
+}

@@ -20,7 +20,9 @@ function Legal() {
         <h3>E-Mail:</h3>
         <p>aqualifeline@fish.de</p>
         <h3>Tel.:</h3>
-        <p>0611 123123</p>
+        <p>+49 (611) 246-2116</p>
+        <h3>Hotline</h3>
+        <p>0800 2116 800</p>
         <h2>HINWEIS:</h2>
         <p>
           Dies ist ein nicht-kommerzielles Schulprojekt. Die Inhalte dienen

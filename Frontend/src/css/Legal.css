@@ -37,3 +37,39 @@
 
 .datenschutz {
 }
+
+
+@media (max-width: 480px) {
+
+  .impressum,
+  .agb,
+  .datenschutz {
+    color: var(--light-yellow);
+    margin: 0 1rem;
+  }
+
+  .impressum p,
+  .agb p,
+  .datenschutz p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .impressum h1,
+  .agb h1,
+  .datenschutz h1 {
+    font-size: 2rem;
+    color: var(--vibrant-coral);
+    text-shadow: 0rem 0.3rem 0.5rem rgba(0, 0, 0, 0.5);
+}
+
+  .impressum h2,
+  .agb h2,
+  .datenschutz h2 {
+    font-size: 1.4rem;
+  }
+
+  .impressum h3 {
+    font-size: 1.2rem;
+  }
+}

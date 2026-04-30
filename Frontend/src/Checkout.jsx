@@ -115,7 +115,7 @@ function Checkout({ shoppingCart, setShoppingCart }) {
                 {shoppingCart.map((product, index) =>
                   itemTemplate(product, index),
                 )}
-                <h2 className="total">GESAMT: {totalCost} €</h2>
+                <h2 className="total">Gesamt: {totalCost} €</h2>
               </div>
               <Button
                 icon="pi pi-shopping-cart"

@@ -76,20 +76,81 @@ img {
 }
 
 @media (max-width: 480px) {
-  .homeWrapper {
-    top: 2rem;
-    left: 1rem;
-    margin: 0 1rem 1rem 0;
-  }
+.homeWrapper {
+  position: fixed;
+  top: 2rem;
+  left: 0.3rem;
+  z-index: 800;
+  padding:0.2rem;
+  background-color: var(--vibrant-coral);
+  border-radius: 0.5rem;
+  box-shadow: 0rem 0.3rem 0.5rem rgb(0, 0, 0, 0.3);
+  overflow: hidden;
+  transition: 0.3s ease;
+}
 
-  .home {
-    min-width: 5rem;
-    height: 4rem;
-    padding: 1rem;
-    font-size: 2rem;
-  }
+.home {
+  display: flex;
+  min-width: 1rem;
+  height: 3rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 0.5rem;
+  background-color: transparent;
+  border: none;
+  color: white;
+  padding: 0rem 0rem;
+  font-size: 1rem;
+  width: 100%;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
 
-  img {
-    max-width: 4rem;
-  }
+.home:hover {
+  background-color: var(--bright-coral);
+}
+
+.subButtons {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.homeWrapper.expanded .subButtons {
+  max-height: 10rem;
+}
+
+.subHomeButton {
+  display: flex;
+  align-items: center;
+  gap: 0rem;
+  width: 100%;
+  padding: 0.8rem;
+  justify-content: center;
+  text-align: center;
+  background-color: var(--tropical-teal);
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.subHomeButton:hover {
+  background-color: var(--cerulean);
+}
+
+.close {
+  background-color: var(--vibrant-coral);
+}
+
+.close:hover {
+  background-color: var(--bright-coral);
+}
+
+img {
+  max-width: 3rem;
+}
 }
