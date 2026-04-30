@@ -43,14 +43,14 @@ const options2 = {
   },
 };
 
-const addDataForSerialNum = (serialNum, data) => {
+const translateData = (serialNum, data) => {
   const timestamps = [];
   const waterquality = [];
   const temperature = [];
   const waterLevel = [];
   const ph = [];
 
-  data.sensorSet.daten.forEach((datum) => {
+  data.forEach((datum) => {
     timestamps.push(datum.timestamp);
     waterquality.push(datum.Wasserqualitaet);
     temperature.push(datum.Temperatur);
@@ -73,13 +73,16 @@ const addDataForSerialNum = (serialNum, data) => {
 const addSystem = (
   hideElement,
   serialNumber,
+  aquariumId,
   parsedData,
   chartsArray,
   setCharts,
   lastId,
 ) => {
+  console.log(JSON.stringify(parsedData));
   const newChart = {
     id: lastId + 1,
+    aquariumId: aquariumId,
     serialNumber: serialNumber,
     dates: null,
     data: {
@@ -137,10 +140,12 @@ async function addAquarium(serialnum, hide, charts, setCharts) {
   }
 
   const result = await response.json();
-  const parsedData = addDataForSerialNum(serialnum, result);
+  console.log(result);
+  const parsedData = translateData(serialnum, result);
   addSystem(
     hide,
     serialnum,
+    result.id,
     parsedData,
     charts,
     setCharts,
@@ -154,30 +159,57 @@ function SystemView() {
   const [serialId, setSerialId] = useState("");
   const [dates, setDates] = useState();
 
+  const formatLocalDateTime = (date) => {
+    const d = new Date(
+      date.toLocaleString("en-US", { timeZone: "Europe/Berlin" }),
+    );
+
+    const pad = (n) => String(n).padStart(2, "0");
+
+    return (
+      d.getFullYear() +
+      "-" +
+      pad(d.getMonth() + 1) +
+      "-" +
+      pad(d.getDate()) +
+      "T" +
+      pad(d.getHours()) +
+      ":" +
+      pad(d.getMinutes()) +
+      ":" +
+      pad(d.getSeconds())
+    );
+  };
+
   const fetchDataForTimespan = async (chart, newDates) => {
     if (!newDates || !newDates[0] || !newDates[1]) return;
 
     const token = localStorage.getItem("token");
-    const from = newDates[0].toISOString().slice(0, 19);
-    const to = newDates[1].toISOString().slice(0, 19);
+
+    const from = formatLocalDateTime(newDates[0]);
+    const to = formatLocalDateTime(newDates[1]);
+
+    console.log(
+      "URL:",
+      `${import.meta.env.VITE_API_URL}/aquarien/${chart.aquariumId}/daten/timestamp?start=${from}&end=${to}`,
+    );
+    console.log("Token:", token);
 
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/aquarien/serialNumber/${chart.serialNumber}/daten`,
+      `${import.meta.env.VITE_API_URL}/aquarien/${chart.aquariumId}/daten/timestamp?start=${from}&end=${to}`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         credentials: "include",
-        body: JSON.stringify({ from: from, to: to }),
       },
     );
 
     if (!response.ok) return;
 
     const result = await response.json();
-    const parsedData = addDataForSerialNum(chart.serialNumber, result);
+    const parsedData = translateData(chart.serialNumber, result);
 
     setCharts((prev) =>
       prev.map((c) =>
