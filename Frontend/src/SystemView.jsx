@@ -154,6 +154,60 @@ function SystemView() {
   const [serialId, setSerialId] = useState("");
   const [dates, setDates] = useState();
 
+  const fetchDataForTimespan = async (chart, newDates) => {
+    if (!newDates || !newDates[0] || !newDates[1]) return;
+
+    const token = localStorage.getItem("token");
+    const from = newDates[0].toISOString().slice(0, 19);
+    const to = newDates[1].toISOString().slice(0, 19);
+
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/aquarien/serialNumber/${chart.serialNumber}/daten`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({ from: from, to: to }),
+      },
+    );
+
+    if (!response.ok) return;
+
+    const result = await response.json();
+    const parsedData = addDataForSerialNum(chart.serialNumber, result);
+
+    setCharts((prev) =>
+      prev.map((c) =>
+        c.id !== chart.id
+          ? c
+          : {
+              ...c,
+              data: {
+                labels: parsedData.timestamps,
+                datasets: [
+                  {
+                    ...c.data.datasets[0],
+                    data: parsedData.sensorData.waterquality,
+                  },
+                  {
+                    ...c.data.datasets[1],
+                    data: parsedData.sensorData.temperature,
+                  },
+                  { ...c.data.datasets[2], data: parsedData.sensorData.ph },
+                  {
+                    ...c.data.datasets[3],
+                    data: parsedData.sensorData.waterLevel,
+                  },
+                ],
+              },
+            },
+      ),
+    );
+  };
+
   return (
     <>
       <div id="container" className={visible ? "blurred" : ""}>
@@ -178,17 +232,14 @@ function SystemView() {
                   <h2 className="calendar-title">Zeitspanne:</h2>
                   <Calendar
                     value={chart.dates}
-                    onChange={(e) => {
+                    onChange={async (e) => {
+                      const newDates = e.value;
                       setCharts((prev) =>
-                        prev.map(
-                          (
-                            calendar, // search for corresponding chart for calendar
-                          ) =>
-                            calendar.id === chart.id
-                              ? { ...calendar, dates: e.value }
-                              : calendar,
+                        prev.map((c) =>
+                          c.id === chart.id ? { ...c, dates: newDates } : c,
                         ),
                       );
+                      await fetchDataForTimespan(chart, newDates);
                     }}
                     selectionMode="range"
                     readOnlyInput
