@@ -74,3 +74,22 @@
 img {
   max-width: 3rem;
 }
+
+@media (max-width: 480px) {
+  .homeWrapper {
+    top: 2rem;
+    left: 1rem;
+    margin: 0 1rem 1rem 0;
+  }
+
+  .home {
+    min-width: 5rem;
+    height: 4rem;
+    padding: 1rem;
+    font-size: 2rem;
+  }
+
+  img {
+    max-width: 4rem;
+  }
+}

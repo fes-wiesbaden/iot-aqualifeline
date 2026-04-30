@@ -47,6 +47,14 @@
   padding: 1rem;
 }
 
+@media (max-width: 480px) {
+  .shopping-cart-btn i {
+  font-size: 2rem;
+  left: 0.5rem;
+  padding: 1rem;
+}}
+
+
 .shopping-cart {
   z-index: 750;
   display: inline-flex;

@@ -45,6 +45,7 @@ function Shop({ shoppingCart, setShoppingCart }) {
         <div className="prod-data-wrap">
           <div className="prod-info">
             <div className="prod-name">{product.name}</div>
+            <span className="prod-price">{product.price}€</span>
             <Rating value={product.rating} readOnly cancel={false}></Rating>
             <div className="prod-lesser-info">
               <span className="prod-tag">
@@ -60,7 +61,6 @@ function Shop({ shoppingCart, setShoppingCart }) {
           </div>
 
           <div className="prod-buy-wrap">
-            <span className="prod-price">{product.price}€</span>
             <Button
               icon="pi pi-shopping-cart"
               className="prod-shop-button"
