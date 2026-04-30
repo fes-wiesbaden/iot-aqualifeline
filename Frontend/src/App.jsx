@@ -8,6 +8,7 @@ import Shop from "./Shop";
 import Login from "./Login";
 import Checkout from "./Checkout";
 import LoadingScreen from "./LoadingScreen";
+import AboutUs from "./AboutUs";
 import { useState } from "react";
 
 function LoggedIn() {
@@ -40,9 +41,10 @@ function App() {
                 id="landingpage-pic"
               />
               <button className="loginnav" onClick={() => navigate("/login")}>
-                GET STARTED
+                JETZT LOSLEGEN!
               </button>
             </div>
+            <AboutUs />
             <Footer />
           </>
         }

@@ -46,7 +46,7 @@ function HomeButton() {
             setIsExpanded(false);
           }}
         >
-          <i className="pi pi-times"></i> Close
+          <i className="pi pi-times"></i> Schließen
         </button>
       </div>
     </div>

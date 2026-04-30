@@ -5,7 +5,7 @@ import { Link } from "react-router";
 function Footer() {
   return (
     <footer>
-      <h1>ABOUT</h1>
+      <h1>KONTAKT & WEITERES</h1>
       <div className="footerinside">
         <p>
           <Link to="/legal">IMPRESSUM</Link>
