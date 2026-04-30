@@ -43,10 +43,37 @@ const options2 = {
   },
 };
 
+const addDataForSerialNum = (serialNum, data) => {
+  const timestamps = [];
+  const waterquality = [];
+  const temperature = [];
+  const waterLevel = [];
+  const ph = [];
+
+  data.sensorSet.daten.forEach((datum) => {
+    timestamps.push(datum.timestamp);
+    waterquality.push(datum.Wasserqualitaet);
+    temperature.push(datum.Temperatur);
+    waterLevel.push(datum.Wasserstand);
+    ph.push(datum.PH);
+  });
+
+  return {
+    serial: serialNum,
+    timestamps: timestamps,
+    sensorData: {
+      waterquality: waterquality,
+      temperature: temperature,
+      waterLevel: waterLevel,
+      ph: ph,
+    },
+  };
+};
+
 const addSystem = (
   hideElement,
   serialNumber,
-  aquariumData,
+  parsedData,
   chartsArray,
   setCharts,
   lastId,
@@ -56,12 +83,32 @@ const addSystem = (
     serialNumber: serialNumber,
     dates: null,
     data: {
-      labels: [],
+      labels: parsedData ? parsedData.timestamps : [],
       datasets: [
-        { label: "Wasserqualität", data: [], fill: false, tension: 0.4 },
-        { label: "Temperatur", data: [], fill: false, tension: 0.4 },
-        { label: "pH-Wert", data: [], fill: false, tension: 0.4 },
-        { label: "Wasserstand", data: [], fill: false, tension: 0.4 },
+        {
+          label: "Wasserqualität",
+          data: parsedData ? parsedData.sensorData.waterquality : [],
+          fill: false,
+          tension: 0.4,
+        },
+        {
+          label: "Temperatur",
+          data: parsedData ? parsedData.sensorData.temperature : [],
+          fill: false,
+          tension: 0.4,
+        },
+        {
+          label: "pH-Wert",
+          data: parsedData ? parsedData.sensorData.ph : [],
+          fill: false,
+          tension: 0.4,
+        },
+        {
+          label: "Wasserstand",
+          data: parsedData ? parsedData.sensorData.waterLevel : [],
+          fill: false,
+          tension: 0.4,
+        },
       ],
     },
     options: options2,
@@ -70,10 +117,8 @@ const addSystem = (
   hideElement();
 };
 
-async function addAquarium(serialnum) {
-  console.log("START FETCH AQUARIUM BY SERIAL NUM");
+async function addAquarium(serialnum, hide, charts, setCharts) {
   const token = localStorage.getItem("token");
-  console.log("Token:", token);
   const response = await fetch(
     `${import.meta.env.VITE_API_URL}/aquarien/serialNumber/${serialnum}`,
     {
@@ -86,68 +131,82 @@ async function addAquarium(serialnum) {
     },
   );
 
-  const result = await response.text();
-  console.log("RESULT:");
-  console.log(result);
+  if (!response.ok) {
+    console.error("Aquarium not found");
+    return;
+  }
 
-  /*addSystem(
+  const result = await response.json();
+  const parsedData = addDataForSerialNum(serialnum, result);
+  addSystem(
     hide,
-    serialId,
+    serialnum,
+    parsedData,
     charts,
     setCharts,
     charts.length > 0 ? charts.at(-1).id : 0,
   );
-  */
-
-  return { success: response.ok, message: result };
 }
-
-const fetchChartData = async (chart) => {
-  if (!chart.dates || !chart.dates[0] || !chart.dates[1]) {
-    console.warn("No date range selected");
-    return;
-  }
-  const token = localStorage.getItem("token");
-  const from = chart.dates[0].toISOString();
-  const to = chart.dates[1].toISOString();
-
-  const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/measurements/${chart.serialNumber}?from=${from}&to=${to}`,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    },
-  );
-
-  const measurements = await response.json();
-
-  setCharts((prev) =>
-    prev.map((c) => {
-      if (c.id !== chart.id) return c;
-      return { // find chart
-        ...c,
-        data: {
-          labels: measurements.map((measurement) => measurement.timestamp), 
-          datasets: c.data.datasets.map((dataset) => ({
-            ...dataset,
-            data: measurements
-              .filter(
-                (measurement) =>
-                  measurement.sensorType ===
-                  dataset.label.toUpperCase().replace(" ", "_"), // ! dependent on what backend named it
-              )
-              .map((measurement) => measurement.value), // sets data dependent on sensor
-          })),
-        },
-      };
-    }),
-  );
-};
 
 function SystemView() {
   const [charts, setCharts] = useState([]);
   const [visible, setVisible] = useState(false);
   const [serialId, setSerialId] = useState("");
   const [dates, setDates] = useState();
+
+  const fetchDataForTimespan = async (chart, newDates) => {
+    if (!newDates || !newDates[0] || !newDates[1]) return;
+
+    const token = localStorage.getItem("token");
+    const from = newDates[0].toISOString().slice(0, 19);
+    const to = newDates[1].toISOString().slice(0, 19);
+
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/aquarien/serialNumber/${chart.serialNumber}/daten`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({ from: from, to: to }),
+      },
+    );
+
+    if (!response.ok) return;
+
+    const result = await response.json();
+    const parsedData = addDataForSerialNum(chart.serialNumber, result);
+
+    setCharts((prev) =>
+      prev.map((c) =>
+        c.id !== chart.id
+          ? c
+          : {
+              ...c,
+              data: {
+                labels: parsedData.timestamps,
+                datasets: [
+                  {
+                    ...c.data.datasets[0],
+                    data: parsedData.sensorData.waterquality,
+                  },
+                  {
+                    ...c.data.datasets[1],
+                    data: parsedData.sensorData.temperature,
+                  },
+                  { ...c.data.datasets[2], data: parsedData.sensorData.ph },
+                  {
+                    ...c.data.datasets[3],
+                    data: parsedData.sensorData.waterLevel,
+                  },
+                ],
+              },
+            },
+      ),
+    );
+  };
 
   return (
     <>
@@ -173,14 +232,14 @@ function SystemView() {
                   <h2 className="calendar-title">Zeitspanne:</h2>
                   <Calendar
                     value={chart.dates}
-                    onChange={(e) => {
+                    onChange={async (e) => {
+                      const newDates = e.value;
                       setCharts((prev) =>
-                        prev.map((calendar) => // search for corresponding chart for calendar
-                          calendar.id === chart.id
-                            ? { ...calendar, dates: e.value }
-                            : calendar,
+                        prev.map((c) =>
+                          c.id === chart.id ? { ...c, dates: newDates } : c,
                         ),
                       );
+                      await fetchDataForTimespan(chart, newDates);
                     }}
                     selectionMode="range"
                     readOnlyInput
@@ -198,7 +257,7 @@ function SystemView() {
                     showDelay: 500,
                     hideDelay: 100,
                   }}
-                  onClick={() => fetchChartData(chart)}
+                  onClick={() => alert("fetch new chart data")}
                 ></Button>
               </div>
             </div>
@@ -256,7 +315,9 @@ function SystemView() {
                 ></Button>
                 <Button
                   label="Test Add"
-                  onClick={(e) => addAquarium(serialId)}
+                  onClick={(e) =>
+                    addAquarium(serialId, hide, charts, setCharts)
+                  }
                   text
                   className="btn"
                 ></Button>

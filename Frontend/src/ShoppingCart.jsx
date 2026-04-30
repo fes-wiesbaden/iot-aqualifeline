@@ -40,7 +40,7 @@ function ShoppingCart({ shoppingCart, setShoppingCart  }) {
       <div className="cart-wrap" key={product.id}>
         <img
           className="cart-prod-img"
-          src={`./public/${product.image}`}
+          src={`/iot-aqualifeline/${product.image}`}
           alt={product.name}
         />
         <div className="cart-prod-data-wrap">
