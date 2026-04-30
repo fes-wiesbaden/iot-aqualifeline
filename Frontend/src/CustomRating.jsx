@@ -7,7 +7,7 @@ function CustomRating({ name, text , image }) {
   return (  
   
   <div className="rating">
-          <img className="ratingPic" src={`./public/${image}.png`} alt="Rating Pic"/>
+          <img className="ratingPic" src={`/iot-aqualifeline/${image}.png`} alt="Rating Pic"/>
           <h2 className="ratingName">{name}</h2>
           <div className="ratingStars">
             <i class="pi pi-star-fill"></i>
