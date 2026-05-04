@@ -23,7 +23,7 @@ const data = {
         {
             id: '1002',
             code: 'zz21cz3c1',
-            name: 'Wassererstandsensor',
+            name: 'Wasserstandsensor',
             image: 'waterlevelsensor.jpeg',
             price: 9.99,
             category: 'Sensor',

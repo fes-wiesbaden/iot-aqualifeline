@@ -10,11 +10,11 @@ function CustomRating({ name, text , image }) {
           <img className="ratingPic" src={`/iot-aqualifeline/${image}.png`} alt="Rating Pic"/>
           <h2 className="ratingName">{name}</h2>
           <div className="ratingStars">
-            <i class="pi pi-star-fill"></i>
-            <i class="pi pi-star-fill"></i>
-            <i class="pi pi-star-fill"></i>
-            <i class="pi pi-star-fill"></i>
-            <i class="pi pi-star-fill"></i>
+            <i className="pi pi-star-fill"></i>
+            <i className="pi pi-star-fill"></i>
+            <i className="pi pi-star-fill"></i>
+            <i className="pi pi-star-fill"></i>
+            <i className="pi pi-star-fill"></i>
           </div>
           <span className="ratingText">
             {text ? text : "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Debitis, dignissimos possimus nostrum commodi nulla dolorem temporibus iure? Tenetur minus tempora ratione velit, voluptas id at doloremque rerum nostrum ut ex!" } </span>

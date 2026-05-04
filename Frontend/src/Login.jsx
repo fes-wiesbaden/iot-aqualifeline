@@ -159,7 +159,7 @@ function Login() {
         <h2 className="input-title">Passwort:</h2>
         <input
           className="default-input"
-          placeholder="PASSWORT"
+          placeholder={`${!isRegistering ? "PASSWORT" : "NEUES PASSWORT"}`}
           autoComplete="new-password"
           type={isRegistering ? "text" : "password"}
           value={password}
@@ -170,7 +170,7 @@ function Login() {
         <h2 className="input-title">Passwort bestätigen:</h2>
         <input
           className="default-input"
-          placeholder="PASSWORT BESTÄTIGEN"
+          placeholder={`${!isRegistering ? "PASSWORT" : "NEUES PASSWORT"}`}
           autoComplete="new-password"
           tabIndex={
             !isRegistering ? -1 : 0
@@ -183,9 +183,6 @@ function Login() {
       </div>
       <button className="submit" onClick={handleSubmit}>
         {isRegistering ? "REGISTRIEREN" : "EINLOGGEN"}
-      </button>
-      <button className="submit" onClick={() => navigate("/loggedIn")}>
-          TEST LOGIN
       </button>
       <span
         className="login-toggle"

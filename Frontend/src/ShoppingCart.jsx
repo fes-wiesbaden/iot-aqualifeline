@@ -45,7 +45,7 @@ function ShoppingCart({ shoppingCart, setShoppingCart  }) {
         />
         <div className="cart-prod-data-wrap">
           <div className="cart-prod-info">
-            <div className="cart-prod-name">{product.name}</div>
+            <span className="cart-prod-name">{product.name}</span>
             <span className="cart-prod-price">{product.price}€</span>
           </div>
 

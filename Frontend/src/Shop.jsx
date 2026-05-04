@@ -44,7 +44,7 @@ function Shop({ shoppingCart, setShoppingCart }) {
         />
         <div className="prod-data-wrap">
           <div className="prod-info">
-            <div className="prod-name">{product.name}</div>
+            <span className="prod-name">{product.name}</span>
             <span className="prod-price">{product.price}€</span>
             <Rating value={product.rating} readOnly cancel={false}></Rating>
             <div className="prod-lesser-info">

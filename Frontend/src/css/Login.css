@@ -147,10 +147,10 @@
   position: relative;
   justify-content: center;
   width: 100%;
-  height: 60vh;
+  height: 100vh;
   font-size: 3rem;
   background-color: var(--tropical-teal);
-  padding: 1rem;
+  padding: 2.5rem 3rem 1rem 3rem;
   box-sizing: border-box;
   }
 
@@ -158,7 +158,7 @@
     width: 100%;
     box-sizing: border-box;
     padding: 0.75rem 1rem;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
   }
 
   .default-input:hover {
@@ -179,8 +179,16 @@
     padding: 0.25rem 0;
   }
 
+  .input-title {
+    font-size: 1rem;
+  }
+
   .login-toggle {
-    font-size: 0.85rem;
+    font-size: 1rem;
     text-align: center;
+  }
+
+  .p-toast {
+    max-width: 80vw;
   }
 }

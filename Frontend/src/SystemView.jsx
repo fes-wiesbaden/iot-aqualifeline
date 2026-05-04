@@ -43,20 +43,36 @@ const options2 = {
   },
 };
 
-const translateData = (serialNum, data) => {
+const formatTimestamp = (timestamp) => {
+  const date = new Date(timestamp);
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+};
+
+const translateData = (serialNum, data, refetch) => {
   const timestamps = [];
   const waterquality = [];
   const temperature = [];
   const waterLevel = [];
   const ph = [];
 
-  data.forEach((datum) => {
-    timestamps.push(datum.timestamp);
-    waterquality.push(datum.Wasserqualitaet);
-    temperature.push(datum.Temperatur);
-    waterLevel.push(datum.Wasserstand);
-    ph.push(datum.PH);
-  });
+  if (refetch) {
+    data.forEach((datum) => {
+      timestamps.push(formatTimestamp(datum.timestamp));
+      waterquality.push(datum.Wasserqualitaet);
+      temperature.push(datum.Temperatur);
+      waterLevel.push(datum.Wasserstand);
+      ph.push(datum.PH);
+    });
+  } else {
+    data.sensorSet.daten.forEach((datum) => {
+      timestamps.push(formatTimestamp(datum.timestamp));
+      waterquality.push(datum.Wasserqualitaet);
+      temperature.push(datum.Temperatur);
+      waterLevel.push(datum.Wasserstand);
+      ph.push(datum.PH);
+    });
+  }
 
   return {
     serial: serialNum,
@@ -141,7 +157,7 @@ async function addAquarium(serialnum, hide, charts, setCharts) {
 
   const result = await response.json();
   console.log(result);
-  const parsedData = translateData(serialnum, result);
+  const parsedData = translateData(serialnum, result, false);
   addSystem(
     hide,
     serialnum,
@@ -209,7 +225,63 @@ function SystemView() {
     if (!response.ok) return;
 
     const result = await response.json();
-    const parsedData = translateData(chart.serialNumber, result);
+    const parsedData = translateData(chart.serialNumber, result, true);
+
+    setCharts((prev) =>
+      prev.map((c) =>
+        c.id !== chart.id
+          ? c
+          : {
+              ...c,
+              data: {
+                labels: parsedData.timestamps,
+                datasets: [
+                  {
+                    ...c.data.datasets[0],
+                    data: parsedData.sensorData.waterquality,
+                  },
+                  {
+                    ...c.data.datasets[1],
+                    data: parsedData.sensorData.temperature,
+                  },
+                  { ...c.data.datasets[2], data: parsedData.sensorData.ph },
+                  {
+                    ...c.data.datasets[3],
+                    data: parsedData.sensorData.waterLevel,
+                  },
+                ],
+              },
+            },
+      ),
+    );
+  };
+
+  const refetchChart = async (chart) => {
+    const token = localStorage.getItem("token");
+
+    // if dates are set, fetch with timespan
+    if (chart.dates?.[0] && chart.dates?.[1]) {
+      await fetchDataForTimespan(chart, chart.dates);
+      return;
+    }
+
+    // otherwise fetch all data for the aquarium
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/aquarien/serialNumber/${chart.serialNumber}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+      },
+    );
+
+    if (!response.ok) return;
+
+    const result = await response.json();
+    const parsedData = translateData(chart.serialNumber, result, false);
 
     setCharts((prev) =>
       prev.map((c) =>
@@ -243,7 +315,7 @@ function SystemView() {
   return (
     <>
       <div id="container" className={visible ? "blurred" : ""}>
-        <h1>DEINE SYSTEME</h1>
+        <h1 className="loggedInHeadline">DEINE SYSTEME</h1>
         {charts.length == 0 && (
           <h2 className="nosystems-warning">Noch keine Systeme hinzugefügt</h2>
         )}
@@ -261,35 +333,71 @@ function SystemView() {
               </div>
               <div className="chart-extras">
                 <div className="calendar-wrapper">
-                  <h2 className="calendar-title">Zeitspanne:</h2>
-                  <Calendar
-                    value={chart.dates}
-                    onChange={async (e) => {
-                      const newDates = e.value;
-                      setCharts((prev) =>
-                        prev.map((c) =>
-                          c.id === chart.id ? { ...c, dates: newDates } : c,
-                        ),
-                      );
-                      await fetchDataForTimespan(chart, newDates);
-                    }}
-                    selectionMode="range"
-                    readOnlyInput
-                    hideOnRangeSelection
-                    showTime
-                    hourFormat="24"
-                  />
+                  <div className="calendar-inputs">
+                    <div>
+                      <h2 className="calendar-title">Von:</h2>
+                      <Calendar
+                        value={chart.dates?.[0] ?? null}
+                        onChange={async (e) => {
+                          const newDates = [e.value, chart.dates?.[1] ?? null];
+                          setCharts((prev) =>
+                            prev.map((c) =>
+                              c.id === chart.id ? { ...c, dates: newDates } : c,
+                            ),
+                          );
+                          await fetchDataForTimespan(chart, newDates);
+                        }}
+                        showTime
+                        hourFormat="24"
+                      />
+                    </div>
+                    <div>
+                      <h2 className="calendar-title">Bis:</h2>
+                      <Calendar
+                        value={chart.dates?.[1] ?? null}
+                        onChange={async (e) => {
+                          const newDates = [chart.dates?.[0] ?? null, e.value];
+                          setCharts((prev) =>
+                            prev.map((c) =>
+                              c.id === chart.id ? { ...c, dates: newDates } : c,
+                            ),
+                          );
+                          await fetchDataForTimespan(chart, newDates);
+                        }}
+                        showTime
+                        hourFormat="24"
+                      />
+                    </div>
+                  </div>
                 </div>
                 <Button
-                  icon="pi pi-refresh"
-                  className="refresh-chart-data"
-                  tooltip="fetch newest data for this device"
+                  icon="pi pi-times"
+                  className="refresh-chart-data red"
+                  tooltip="Zeitspanne zurücksetzen"
                   tooltipOptions={{
                     position: "top",
                     showDelay: 500,
                     hideDelay: 100,
                   }}
-                  onClick={() => alert("fetch new chart data")}
+                  onClick={() => {
+                    setCharts((prev) =>
+                      prev.map((c) =>
+                        c.id === chart.id ? { ...c, dates: null } : c,
+                      ),
+                    );
+                    refetchChart({ ...chart, dates: null });
+                  }}
+                ></Button>
+                <Button
+                  icon="pi pi-refresh"
+                  className="refresh-chart-data"
+                  tooltip="Neueste Daten laden"
+                  tooltipOptions={{
+                    position: "top",
+                    showDelay: 500,
+                    hideDelay: 100,
+                  }}
+                  onClick={() => refetchChart(chart)}
                 ></Button>
               </div>
             </div>
@@ -332,21 +440,6 @@ function SystemView() {
               <div className="btn-wrapper">
                 <Button
                   label="Hinzufügen"
-                  onClick={(e) => {
-                    const result = addSystem(
-                      hide,
-                      serialId,
-                      null,
-                      charts,
-                      setCharts,
-                      charts.length > 0 ? charts.at(-1).id : 0,
-                    );
-                  }}
-                  text
-                  className="btn"
-                ></Button>
-                <Button
-                  label="Test Add"
                   onClick={(e) =>
                     addAquarium(serialId, hide, charts, setCharts)
                   }

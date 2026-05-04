@@ -13,9 +13,9 @@ function Footer() {
         <p>
           <Link to="/legal">DATENSCHUTZ</Link>
         </p>
-        <p>TEL.: 0611 676767</p>
+        <p>TEL.: 0611 2462116</p>
         <p>
-          <Link to="https://www.pexels.com">Bildquelle</Link>
+          <Link to="https://www.pexels.com">BILDQUELLE</Link>
         </p>
       </div>
     </footer>
