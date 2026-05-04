@@ -10,16 +10,16 @@ function ShoppingCart({ shoppingCart, setShoppingCart  }) {
   const updateCount = (id, method) => {
     setShoppingCart((prev) =>
       prev.map((product) => {
-        if (product.id !== id) return product;
+        if (product.id !== id) return product; // initially add 
         return {
-          ...product,
-          count: method === "add" ? product.count + 1 : product.count - 1,
+          ...product, // all the products already added
+          count: method === "add" ? product.count + 1 : product.count - 1, // add or subtract to/from cart 
         };
       }),
     );
   };
 
-  const calcSummary = (products) => {
+  const calcSummary = (products) => { // calculate price sum for all products in cart
     let sum = 0;
     products.forEach((product) => {
       sum = sum + product.price * product.count;
@@ -32,10 +32,10 @@ function ShoppingCart({ shoppingCart, setShoppingCart  }) {
   /** delay to let css settle animations first */
 
   const deleteFromCart = (id) => {
-    setShoppingCart((prev) => prev.filter((p) => p.id !== id));
+    setShoppingCart((prev) => prev.filter((p) => p.id !== id)); // find product via id and filter them out
   };
 
-  const itemTemplate = (product, index) => {
+  const itemTemplate = (product, index) => { // item component structure
     return (
       <div className="cart-wrap" key={product.id}>
         <img
@@ -61,7 +61,7 @@ function ShoppingCart({ shoppingCart, setShoppingCart  }) {
               onValueChange={(e) =>
                 setShoppingCart((prev) =>
                   prev.map((p) =>
-                    p.id === product.id ? { ...p, count: e.value } : p,
+                    p.id === product.id ? { ...p, count: e.value } : p, // set new count value for corresponding product
                   ),
                 )
               }
@@ -106,7 +106,7 @@ function ShoppingCart({ shoppingCart, setShoppingCart  }) {
           <span className="cart-headline">
             DEIN EINKAUFSWAGEN ({shoppingCart.length})
           </span>
-          {shoppingCart.map((product, index) => itemTemplate(product, index))}
+          {shoppingCart.map((product, index) => itemTemplate(product, index)) /** init shopping cart with items */} 
           <div className="cart-footer">
             <span className="cart-summary">
               GESAMT: {calcSummary(shoppingCart)} €

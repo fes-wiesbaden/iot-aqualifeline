@@ -15,10 +15,10 @@ function Shop({ shoppingCart, setShoppingCart }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    ProductService.getProductsSmall().then((data) => setProducts(data));
+    ProductService.getProductsSmall().then((data) => setProducts(data)); // dummy products
   }, []);
 
-  const getSeverity = (product) => {
+  const getSeverity = (product) => { // stock handling
     switch (product.inventoryStatus) {
       case "INSTOCK":
         return "success";
@@ -34,7 +34,7 @@ function Shop({ shoppingCart, setShoppingCart }) {
     }
   };
 
-  const itemTemplate = (product, index) => {
+  const itemTemplate = (product, index) => { // generate item component for each item in the shop
     return (
       <div className="product-wrap" key={product.id}>
         <img
@@ -73,7 +73,7 @@ function Shop({ shoppingCart, setShoppingCart }) {
     );
   };
 
-  const listTemplate = (items) => {
+  const listTemplate = (items) => { // render all items that are in the shop inside container
     if (!items || items.length === 0) return null;
 
     let list = items.map((product, index) => {
@@ -85,20 +85,20 @@ function Shop({ shoppingCart, setShoppingCart }) {
 
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  useEffect(() => { // fake loading to hide component rendering
     const timer = setTimeout(() => setLoading(false), 200);
     return () => clearTimeout(timer);
   }, []);
 
   const addToCart = (product) => {
     setShoppingCart((prev) => {
-      const existing = prev.find((p) => p.id === product.id);
-      if (existing) {
+      const existing = prev.find((p) => p.id === product.id); // find product via id
+      if (existing) { // product already in cart?
         return prev.map((p) =>
-          p.id === product.id ? { ...p, count: p.count + 1 } : p,
+          p.id === product.id ? { ...p, count: p.count + 1 } : p, // increase count of product in cart
         );
       }
-      return [...prev, { ...product, count: 1 }];
+      return [...prev, { ...product, count: 1 }]; // product not in cart > count = 1
     });
   };
 
@@ -113,7 +113,7 @@ function Shop({ shoppingCart, setShoppingCart }) {
           shoppingCart={shoppingCart}
           setShoppingCart={setShoppingCart}
         />
-        <DataView value={products} listTemplate={listTemplate} />
+        <DataView value={products} listTemplate={listTemplate} /> { /** primereact component for view */ }
       </div>
     </>
   );

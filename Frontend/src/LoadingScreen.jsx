@@ -5,6 +5,7 @@ import "primeicons/primeicons.css";
 function LoadingScreen() {
   return (
     <div className="loading-screen">
+      { /* simple primeicons icon with styling for loading spinner */ }
       <i className="pi pi-spin pi-spinner-dotted" style={{ fontSize: "3rem", color: "var(--light-yellow)" }}></i>
     </div>
   );

@@ -11,7 +11,7 @@ function HomeButton() {
     <div className={`homeWrapper ${isExpanded ? "expanded" : ""}`}>
       <button
         className="home"
-        onClick={
+        onClick={ // IF NOT expanded > expand ELSE navigate home
           isExpanded
             ? () => {
                 navigate("/");

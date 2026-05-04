@@ -12,7 +12,7 @@ function Checkout({ shoppingCart, setShoppingCart }) {
   const [loading, setLoading] = useState(true);
   const [totalCost, setTotalCost] = useState();
 
-  const calcSummary = (products) => {
+  const calcSummary = (products) => { // calculate price sum of all products in cart
     let sum = 0;
     products.forEach((product) => {
       sum = sum + product.price * product.count;
@@ -20,18 +20,18 @@ function Checkout({ shoppingCart, setShoppingCart }) {
     setTotalCost(sum);
   };
 
-  useEffect(() => {
+  useEffect(() => { // calculate price sum when initially loading
     calcSummary(shoppingCart);
   }, []);
 
-  useEffect(() => {
+  useEffect(() => { // fake loading timer to hide component rendering
     const timer = setTimeout(() => setLoading(false), 200);
     return () => clearTimeout(timer);
   }, []);
 
   if (loading) return <LoadingScreen />;
 
-  const itemTemplate = (product, index) => {
+  const itemTemplate = (product, index) => { // generate item component for given product
     return (
       <div className="cart-wrap" key={product.id}>
         <img
@@ -49,15 +49,15 @@ function Checkout({ shoppingCart, setShoppingCart }) {
             <Button
               icon="pi pi-plus"
               className="cart-prod-add-button"
-              onClick={() => updateCount(product.id, "add")}
+              onClick={() => updateCount(product.id, "add")} // add 1 to count for given product
             ></Button>
             <InputNumber
               className="prod-count"
               value={product.count}
               onValueChange={(e) =>
-                setShoppingCart((prev) =>
+                setShoppingCart((prev) => 
                   prev.map((p) =>
-                    p.id === product.id ? { ...p, count: e.value } : p,
+                    p.id === product.id ? { ...p, count: e.value } : p, // get chosen product and change its count manually
                   ),
                 )
               }
@@ -67,11 +67,11 @@ function Checkout({ shoppingCart, setShoppingCart }) {
             <Button
               icon="pi pi-minus"
               className="cart-prod-subtract-button"
-              onClick={() => updateCount(product.id, "subtract")}
+              onClick={() => updateCount(product.id, "subtract")} // subtract 1 to count for given product
             ></Button>
             <Button
               icon="pi pi-trash"
-              className="cart-prod-delete-button"
+              className="cart-prod-delete-button" // TODO: implement delete from cart button
             ></Button>
           </div>
         </div>
@@ -83,7 +83,7 @@ function Checkout({ shoppingCart, setShoppingCart }) {
     <>
       <div id="container">
         <h1>KASSE</h1>
-        {console.log(shoppingCart)}
+        {console.log(shoppingCart) /* debug */ } 
         <div className="checkoutContainer">
           <div className="checkoutInnerContainer">
             <div className="shipping">
@@ -112,7 +112,7 @@ function Checkout({ shoppingCart, setShoppingCart }) {
             <div className="summary">
               <div className="summaryText">
                 <h1>Zusammenfassung:</h1>
-                {shoppingCart.map((product, index) =>
+                {shoppingCart.map((product, index) => // create item component for each shopping cart item
                   itemTemplate(product, index),
                 )}
                 <h2 className="total">Gesamt: {totalCost} €</h2>
@@ -121,7 +121,7 @@ function Checkout({ shoppingCart, setShoppingCart }) {
                 icon="pi pi-shopping-cart"
                 label="Bestellen"
                 className="order-button"
-                disabled
+                disabled /* we dont take orders, just proof of concept */
               ></Button>
             </div>
           </div>

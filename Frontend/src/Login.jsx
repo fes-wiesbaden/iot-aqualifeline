@@ -20,7 +20,7 @@ function Login() {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); /** regex for email */
   };
 
-  const clearInputs = () => {
+  const clearInputs = () => { 
     setUsername("");
     setPassword("");
     setEmail("");
@@ -28,7 +28,7 @@ function Login() {
   };
 
   async function login(username, password) {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/login`, { // REST endpoint
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -42,9 +42,9 @@ function Login() {
   }
 
   async function register(username, password) {
-    console.log("Registering with:", username, password);
+    console.log("Registering with:", username, password); // debug
     const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/auth/register`,
+      `${import.meta.env.VITE_API_URL}/auth/register`, // REST endpoint
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -57,7 +57,7 @@ function Login() {
   }
 
   const handleSubmit = async () => {
-    if (isRegistering) {
+    if (isRegistering) { // toast handling for errors
       if (!validateEmail(email)) {
         toast.current?.show({
           severity: "error",
@@ -79,11 +79,11 @@ function Login() {
       const result = await register(
         username,
         password,
-      ); /** declare promise to wait for response */
+      ); /** promise to wait for response */
       if (result.success) {
         localStorage.setItem("token", result.token);
         clearInputs();
-        toast.current?.show({
+        toast.current?.show({ // success toast
           severity: "success",
           summary: "Account created!",
           detail: "You can now sign in.",
@@ -91,9 +91,9 @@ function Login() {
         });
         setIsRegistering(false);
       } else {
-        toast.current?.show({
+        toast.current?.show({ // any other error toast
           severity: "error",
-          summary: "Error",
+          summary: "Unexpected Error",
           detail: result.message,
           life: 4000,
         });
@@ -102,7 +102,7 @@ function Login() {
       const result = await login(
         username,
         password,
-      ); /** declare promise to wait for response */
+      ); /** promise to wait for response */
       if (result.success) {
         localStorage.setItem("token", result.token);
         clearInputs();
@@ -120,7 +120,7 @@ function Login() {
 
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  useEffect(() => { // fake loading to hide component rendering
     const timer = setTimeout(() => setLoading(false), 300);
     return () => clearTimeout(timer);
   }, []);

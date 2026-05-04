@@ -9,7 +9,7 @@ import "primereact/resources/themes/lara-light-cyan/theme.css";
 import "primereact/resources/primereact.min.css";
 import { useState } from "react";
 
-const options2 = {
+const options2 = { // hard coded options for chart view 
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -43,28 +43,29 @@ const options2 = {
   },
 };
 
-const formatTimestamp = (timestamp) => {
+const formatTimestamp = (timestamp) => { // format timestamp to fit backend structure
   const date = new Date(timestamp);
-  const pad = (n) => String(n).padStart(2, "0");
+  const pad = (n) => String(n).padStart(2, "0"); // force string length to 2 for given string
   return `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 };
 
 const translateData = (serialNum, data, refetch) => {
+  // init data arrays
   const timestamps = [];
   const waterquality = [];
   const temperature = [];
   const waterLevel = [];
   const ph = [];
 
-  if (refetch) {
-    data.forEach((datum) => {
+  if (refetch) { // toggle access dependant on if its a refetch (e.g. timespan) or an initial fetch
+    data.forEach((datum) => { // add dataset to each value array
       timestamps.push(formatTimestamp(datum.timestamp));
       waterquality.push(datum.Wasserqualitaet);
       temperature.push(datum.Temperatur);
       waterLevel.push(datum.Wasserstand);
       ph.push(datum.PH);
     });
-  } else {
+  } else { // add dataset to each value array
     data.sensorSet.daten.forEach((datum) => {
       timestamps.push(formatTimestamp(datum.timestamp));
       waterquality.push(datum.Wasserqualitaet);
@@ -74,7 +75,7 @@ const translateData = (serialNum, data, refetch) => {
     });
   }
 
-  return {
+  return { // return as right structure
     serial: serialNum,
     timestamps: timestamps,
     sensorData: {
@@ -87,44 +88,44 @@ const translateData = (serialNum, data, refetch) => {
 };
 
 const addSystem = (
-  hideElement,
-  serialNumber,
+  hideElement, // hide addChart-overlay function
+  serialNumber, 
   aquariumId,
-  parsedData,
-  chartsArray,
-  setCharts,
-  lastId,
+  parsedData, // restructured data
+  chartsArray, // all the charts
+  setCharts, 
+  lastId, // keygen for react
 ) => {
-  console.log(JSON.stringify(parsedData));
+  console.log(JSON.stringify(parsedData)); // debug
   const newChart = {
     id: lastId + 1,
     aquariumId: aquariumId,
     serialNumber: serialNumber,
     dates: null,
     data: {
-      labels: parsedData ? parsedData.timestamps : [],
+      labels: parsedData ? parsedData.timestamps : [], // set if theres data available
       datasets: [
         {
           label: "Wasserqualität",
-          data: parsedData ? parsedData.sensorData.waterquality : [],
+          data: parsedData ? parsedData.sensorData.waterquality : [], // set if theres data available
           fill: false,
           tension: 0.4,
         },
         {
           label: "Temperatur",
-          data: parsedData ? parsedData.sensorData.temperature : [],
+          data: parsedData ? parsedData.sensorData.temperature : [], // set if theres data available
           fill: false,
           tension: 0.4,
         },
         {
           label: "pH-Wert",
-          data: parsedData ? parsedData.sensorData.ph : [],
+          data: parsedData ? parsedData.sensorData.ph : [], // set if theres data available
           fill: false,
           tension: 0.4,
         },
         {
           label: "Wasserstand",
-          data: parsedData ? parsedData.sensorData.waterLevel : [],
+          data: parsedData ? parsedData.sensorData.waterLevel : [], // set if theres data available
           fill: false,
           tension: 0.4,
         },
@@ -132,14 +133,14 @@ const addSystem = (
     },
     options: options2,
   };
-  setCharts([...chartsArray, newChart]);
+  setCharts([...chartsArray, newChart]); // update charts
   hideElement();
 };
 
 async function addAquarium(serialnum, hide, charts, setCharts) {
   const token = localStorage.getItem("token");
   const response = await fetch(
-    `${import.meta.env.VITE_API_URL}/aquarien/serialNumber/${serialnum}`,
+    `${import.meta.env.VITE_API_URL}/aquarien/serialNumber/${serialnum}`, // REST endpoint
     {
       method: "GET",
       headers: {
@@ -157,15 +158,15 @@ async function addAquarium(serialnum, hide, charts, setCharts) {
 
   const result = await response.json();
   console.log(result);
-  const parsedData = translateData(serialnum, result, false);
-  addSystem(
+  const parsedData = translateData(serialnum, result, false); // reformat data
+  addSystem( // add system with correct data
     hide,
     serialnum,
     result.id,
     parsedData,
     charts,
     setCharts,
-    charts.length > 0 ? charts.at(-1).id : 0,
+    charts.length > 0 ? charts.at(-1).id : 0, // set key to 0 if its the first system added
   );
 }
 
@@ -175,7 +176,7 @@ function SystemView() {
   const [serialId, setSerialId] = useState("");
   const [dates, setDates] = useState();
 
-  const formatLocalDateTime = (date) => {
+  const formatLocalDateTime = (date) => { // format date to match backend structure
     const d = new Date(
       date.toLocaleString("en-US", { timeZone: "Europe/Berlin" }),
     );
@@ -198,20 +199,21 @@ function SystemView() {
   };
 
   const fetchDataForTimespan = async (chart, newDates) => {
-    if (!newDates || !newDates[0] || !newDates[1]) return;
+    if (!newDates || !newDates[0] || !newDates[1]) return; // only go on if theres start AND end datetime
 
     const token = localStorage.getItem("token");
 
     const from = formatLocalDateTime(newDates[0]);
     const to = formatLocalDateTime(newDates[1]);
 
+    // debug
     console.log(
       "URL:",
       `${import.meta.env.VITE_API_URL}/aquarien/${chart.aquariumId}/daten/timestamp?start=${from}&end=${to}`,
     );
     console.log("Token:", token);
 
-    const response = await fetch(
+    const response = await fetch( // REST endpoint
       `${import.meta.env.VITE_API_URL}/aquarien/${chart.aquariumId}/daten/timestamp?start=${from}&end=${to}`,
       {
         method: "GET",
@@ -225,14 +227,14 @@ function SystemView() {
     if (!response.ok) return;
 
     const result = await response.json();
-    const parsedData = translateData(chart.serialNumber, result, true);
+    const parsedData = translateData(chart.serialNumber, result, true); // format data correctly
 
-    setCharts((prev) =>
-      prev.map((c) =>
+    setCharts((prev) => // render all affected charts
+      prev.map((c) => 
         c.id !== chart.id
-          ? c
-          : {
-              ...c,
+          ? c // only one chart
+          : { // render the correct chart (with its corresponding calendar)
+              ...c, // spread charts
               data: {
                 labels: parsedData.timestamps,
                 datasets: [
@@ -256,7 +258,7 @@ function SystemView() {
     );
   };
 
-  const refetchChart = async (chart) => {
+  const refetchChart = async (chart) => { // refetch manually
     const token = localStorage.getItem("token");
 
     // if dates are set, fetch with timespan
@@ -283,7 +285,7 @@ function SystemView() {
     const result = await response.json();
     const parsedData = translateData(chart.serialNumber, result, false);
 
-    setCharts((prev) =>
+    setCharts((prev) => // render all affected charts
       prev.map((c) =>
         c.id !== chart.id
           ? c
@@ -337,15 +339,15 @@ function SystemView() {
                     <div>
                       <h2 className="calendar-title">Von:</h2>
                       <Calendar
-                        value={chart.dates?.[0] ?? null}
+                        value={chart.dates?.[0] ?? null} // if date available
                         onChange={async (e) => {
                           const newDates = [e.value, chart.dates?.[1] ?? null];
                           setCharts((prev) =>
                             prev.map((c) =>
-                              c.id === chart.id ? { ...c, dates: newDates } : c,
+                              c.id === chart.id ? { ...c, dates: newDates } : c, 
                             ),
                           );
-                          await fetchDataForTimespan(chart, newDates);
+                          await fetchDataForTimespan(chart, newDates); // refetch with new datetimes
                         }}
                         showTime
                         hourFormat="24"
@@ -354,7 +356,7 @@ function SystemView() {
                     <div>
                       <h2 className="calendar-title">Bis:</h2>
                       <Calendar
-                        value={chart.dates?.[1] ?? null}
+                        value={chart.dates?.[1] ?? null} // if date available
                         onChange={async (e) => {
                           const newDates = [chart.dates?.[0] ?? null, e.value];
                           setCharts((prev) =>
@@ -362,7 +364,7 @@ function SystemView() {
                               c.id === chart.id ? { ...c, dates: newDates } : c,
                             ),
                           );
-                          await fetchDataForTimespan(chart, newDates);
+                          await fetchDataForTimespan(chart, newDates); // refetch with new datetimes
                         }}
                         showTime
                         hourFormat="24"
@@ -385,7 +387,7 @@ function SystemView() {
                         c.id === chart.id ? { ...c, dates: null } : c,
                       ),
                     );
-                    refetchChart({ ...chart, dates: null });
+                    refetchChart({ ...chart, dates: null }); // refetch without timespan
                   }}
                 ></Button>
                 <Button
@@ -397,7 +399,7 @@ function SystemView() {
                     showDelay: 500,
                     hideDelay: 100,
                   }}
-                  onClick={() => refetchChart(chart)}
+                  onClick={() => refetchChart(chart)} // manual refetch
                 ></Button>
               </div>
             </div>
