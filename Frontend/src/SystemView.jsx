@@ -4,12 +4,14 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
+import { Checkbox } from "primereact/checkbox";
 import "primeicons/primeicons.css";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import "primereact/resources/primereact.min.css";
 import { useState } from "react";
 
-const options2 = { // hard coded options for chart view 
+const options2 = {
+  // hard coded options for chart view
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -43,7 +45,8 @@ const options2 = { // hard coded options for chart view
   },
 };
 
-const formatTimestamp = (timestamp) => { // format timestamp to fit backend structure
+const formatTimestamp = (timestamp) => {
+  // format timestamp to fit backend structure
   const date = new Date(timestamp);
   const pad = (n) => String(n).padStart(2, "0"); // force string length to 2 for given string
   return `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
@@ -57,15 +60,18 @@ const translateData = (serialNum, data, refetch) => {
   const waterLevel = [];
   const ph = [];
 
-  if (refetch) { // toggle access dependant on if its a refetch (e.g. timespan) or an initial fetch
-    data.forEach((datum) => { // add dataset to each value array
+  if (refetch) {
+    // toggle access dependant on if its a refetch (e.g. timespan) or an initial fetch
+    data.forEach((datum) => {
+      // add dataset to each value array
       timestamps.push(formatTimestamp(datum.timestamp));
       waterquality.push(datum.Wasserqualitaet);
       temperature.push(datum.Temperatur);
       waterLevel.push(datum.Wasserstand);
       ph.push(datum.PH);
     });
-  } else { // add dataset to each value array
+  } else {
+    // add dataset to each value array
     data.sensorSet.daten.forEach((datum) => {
       timestamps.push(formatTimestamp(datum.timestamp));
       waterquality.push(datum.Wasserqualitaet);
@@ -75,7 +81,8 @@ const translateData = (serialNum, data, refetch) => {
     });
   }
 
-  return { // return as right structure
+  return {
+    // return as right structure
     serial: serialNum,
     timestamps: timestamps,
     sensorData: {
@@ -89,16 +96,18 @@ const translateData = (serialNum, data, refetch) => {
 
 const addSystem = (
   hideElement, // hide addChart-overlay function
-  serialNumber, 
+  serialNumber,
   aquariumId,
   parsedData, // restructured data
   chartsArray, // all the charts
-  setCharts, 
+  setCharts,
   lastId, // keygen for react
 ) => {
   console.log(JSON.stringify(parsedData)); // debug
   const newChart = {
     id: lastId + 1,
+    live: false,
+    intervalId: null,
     aquariumId: aquariumId,
     serialNumber: serialNumber,
     dates: null,
@@ -159,7 +168,8 @@ async function addAquarium(serialnum, hide, charts, setCharts) {
   const result = await response.json();
   console.log(result);
   const parsedData = translateData(serialnum, result, false); // reformat data
-  addSystem( // add system with correct data
+  addSystem(
+    // add system with correct data
     hide,
     serialnum,
     result.id,
@@ -176,7 +186,8 @@ function SystemView() {
   const [serialId, setSerialId] = useState("");
   const [dates, setDates] = useState();
 
-  const formatLocalDateTime = (date) => { // format date to match backend structure
+  const formatLocalDateTime = (date) => {
+    // format date to match backend structure
     const d = new Date(
       date.toLocaleString("en-US", { timeZone: "Europe/Berlin" }),
     );
@@ -213,7 +224,8 @@ function SystemView() {
     );
     console.log("Token:", token);
 
-    const response = await fetch( // REST endpoint
+    const response = await fetch(
+      // REST endpoint
       `${import.meta.env.VITE_API_URL}/aquarien/${chart.aquariumId}/daten/timestamp?start=${from}&end=${to}`,
       {
         method: "GET",
@@ -229,36 +241,45 @@ function SystemView() {
     const result = await response.json();
     const parsedData = translateData(chart.serialNumber, result, true); // format data correctly
 
-    setCharts((prev) => // render all affected charts
-      prev.map((c) => 
-        c.id !== chart.id
-          ? c // only one chart
-          : { // render the correct chart (with its corresponding calendar)
-              ...c, // spread charts
-              data: {
-                labels: parsedData.timestamps,
-                datasets: [
-                  {
-                    ...c.data.datasets[0],
-                    data: parsedData.sensorData.waterquality,
+    setCharts(
+      (
+        prev, // render all affected charts
+      ) =>
+        prev.map(
+          (
+            c, // iterate over all charts
+          ) =>
+            c.id !== chart.id
+              ? c // not the target chart? return unchanged
+              : {
+                  // target chart?
+                  ...c, // keep existing data (eg options)
+                  data: {
+                    // replace correct data
+                    labels: parsedData.timestamps,
+                    datasets: [
+                      {
+                        ...c.data.datasets[0],
+                        data: parsedData.sensorData.waterquality,
+                      },
+                      {
+                        ...c.data.datasets[1],
+                        data: parsedData.sensorData.temperature,
+                      },
+                      { ...c.data.datasets[2], data: parsedData.sensorData.ph },
+                      {
+                        ...c.data.datasets[3],
+                        data: parsedData.sensorData.waterLevel,
+                      },
+                    ],
                   },
-                  {
-                    ...c.data.datasets[1],
-                    data: parsedData.sensorData.temperature,
-                  },
-                  { ...c.data.datasets[2], data: parsedData.sensorData.ph },
-                  {
-                    ...c.data.datasets[3],
-                    data: parsedData.sensorData.waterLevel,
-                  },
-                ],
-              },
-            },
-      ),
+                },
+        ),
     );
   };
 
-  const refetchChart = async (chart) => { // refetch manually
+  const refetchChart = async (chart) => {
+    // refetch manually
     const token = localStorage.getItem("token");
 
     // if dates are set, fetch with timespan
@@ -285,32 +306,66 @@ function SystemView() {
     const result = await response.json();
     const parsedData = translateData(chart.serialNumber, result, false);
 
-    setCharts((prev) => // render all affected charts
-      prev.map((c) =>
-        c.id !== chart.id
-          ? c
-          : {
-              ...c,
-              data: {
-                labels: parsedData.timestamps,
-                datasets: [
-                  {
-                    ...c.data.datasets[0],
-                    data: parsedData.sensorData.waterquality,
-                  },
-                  {
-                    ...c.data.datasets[1],
-                    data: parsedData.sensorData.temperature,
-                  },
-                  { ...c.data.datasets[2], data: parsedData.sensorData.ph },
-                  {
-                    ...c.data.datasets[3],
-                    data: parsedData.sensorData.waterLevel,
-                  },
-                ],
+    setCharts((prev) =>
+      prev.map(
+        (
+          c, // iterate over all charts
+        ) =>
+          c.id !== chart.id
+            ? c // not the correct chart > unchanged
+            : {
+                ...c, // keep options etc
+                data: {
+                  // edit data form correct chart
+                  labels: parsedData.timestamps,
+                  datasets: [
+                    {
+                      ...c.data.datasets[0],
+                      data: parsedData.sensorData.waterquality,
+                    },
+                    {
+                      ...c.data.datasets[1],
+                      data: parsedData.sensorData.temperature,
+                    },
+                    { ...c.data.datasets[2], data: parsedData.sensorData.ph },
+                    {
+                      ...c.data.datasets[3],
+                      data: parsedData.sensorData.waterLevel,
+                    },
+                  ],
+                },
               },
-            },
       ),
+    );
+  };
+
+  const toggleLiveRefetch = (chart, isChecked) => {
+    setCharts((prev) =>
+      prev.map((c) => {
+        if (c.id !== chart.id) return c;
+
+        // START interval
+        if (isChecked) {
+          if (c.intervalId) return c; // already running
+
+          const id = setInterval(() => {
+            setCharts((prev) => {
+              const current = prev.find((x) => x.id === chart.id);
+              if (current) refetchChart(current);
+              return prev;
+            });
+          }, 10000);
+
+          return { ...c, live: true, intervalId: id };
+        }
+
+        // STOP interval
+        if (c.intervalId) {
+          clearInterval(c.intervalId);
+        }
+
+        return { ...c, live: false, intervalId: null };
+      }),
     );
   };
 
@@ -344,7 +399,7 @@ function SystemView() {
                           const newDates = [e.value, chart.dates?.[1] ?? null];
                           setCharts((prev) =>
                             prev.map((c) =>
-                              c.id === chart.id ? { ...c, dates: newDates } : c, 
+                              c.id === chart.id ? { ...c, dates: newDates } : c,
                             ),
                           );
                           await fetchDataForTimespan(chart, newDates); // refetch with new datetimes
@@ -390,6 +445,15 @@ function SystemView() {
                     refetchChart({ ...chart, dates: null }); // refetch without timespan
                   }}
                 ></Button>
+                <div className="live-button">
+                  <h2 className="calendar-title">LIVE:</h2>
+                  <Checkbox
+                    onChange={(e) => {
+                      toggleLiveRefetch(chart, e.checked);
+                    }}
+                    checked={chart.live}
+                  ></Checkbox>
+                </div>
                 <Button
                   icon="pi pi-refresh"
                   className="refresh-chart-data"
