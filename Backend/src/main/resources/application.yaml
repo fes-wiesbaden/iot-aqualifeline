@@ -2,9 +2,9 @@ spring:
   application:
     name: Backend
   datasource:
-    url: jdbc:postgresql://db.ujehebzgakjirryxiixm.supabase.co:5432/postgres?sslmode=require # Replace with valid Data
-    username: postgres
-    password: Start13579Start135
+      url: jdbc:mysql://localhost:3306/aqualifelinedb
+      username: root
+      password: root
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,3 +14,6 @@ mqtt:
     url: tcp://10.93.128.211:1883
     client:
       id: SpringBootClient
+jwt:
+  secret: mysecretkey1234567890mysecretkey1234567890
+  expiration: 3600000

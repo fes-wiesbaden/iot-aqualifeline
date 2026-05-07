@@ -1,7 +1,8 @@
 package com.AquaLifeLine.Backend;
 
 public enum SensorType {
-    Temperatur,
+    PH,
     Wasserstand,
-    Wasserqualitaet
+    Wasserqualitaet,
+    Temperatur
 }

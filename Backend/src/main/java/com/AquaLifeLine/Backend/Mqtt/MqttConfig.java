@@ -24,12 +24,10 @@ public class MqttConfig {
     @Bean
     public MqttPahoClientFactory mqttClientFactory() {
         DefaultMqttPahoClientFactory factory = new DefaultMqttPahoClientFactory();
-
         MqttConnectOptions options = new MqttConnectOptions();
         options.setServerURIs(new String[] { brokerUrl });
-
+        options.setCleanSession(true);
         factory.setConnectionOptions(options);
-        
         return factory;
     }
 
@@ -43,11 +41,12 @@ public class MqttConfig {
         return new DirectChannel();
     }
 
+    // Subscriber einrichten
     @Bean
     public MqttPahoMessageDrivenChannelAdapter adapter() {
         MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter(clientId,
                 mqttClientFactory(),
-                "sensor/#");
+                "sensor/#"); // Alle Channel unter sensor subscriben
         adapter.setOutputChannel(mqttInputChannel());
         return adapter;
     }

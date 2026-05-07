@@ -33,7 +33,7 @@ function App() {
               <HomeButton />
               <div className="greeting">
                 <h1 id="headtitle">AquaLifeline.</h1>
-                <h2 id="headsubtitle">Probleme erkennen, bevor sie Wellen schlagen!</h2>
+                <h2 id="headsubtitle">Gefahren erkennen, bevor sie Wellen schlagen!</h2>
               </div>
               <img
                 src="/iot-aqualifeline/landingpage1.jpg"
